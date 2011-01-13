@@ -1,0 +1,35 @@
+jCinema is designed to be a user interface for media players. It runs as a web
+application using HTML/CSS to present the user interface, and JavaScript as its
+main programming language. Infrastructure that can not be written in JavaScript
+has to be implemented in the backend process, which the webapp communicates with
+via JSON-RPC. This is written in Perl (at least at this point).
+
+Requirements for this projects to run on any media player are not that hard:
+1. You need a full screen webkit-based web browser. Sources for one written
+   for QtEmbedded are provided as part of this project.
+2. It must be possible to control media playing one way or another, and needs
+   to be implemented for the specific platform.
+
+As this project was born with the WDTV in mind, that is the main platform to be
+supported. QtEmbedded needed a minor patch, because it didn't pass on all key
+codes. More precisely, it didn't pass on any key presses it couldn't map (like
+the Power key and such).
+
+How to install on the WDTV, running WDLXTV:
+
+1. Disable dmaosd launch in /bin/run_all-wdtvext
+2. Install QtEmbedded-4.7.1 (it should end up in /usr/local/TrollTech/Qt-4.7.1)
+3. Launch the backend daemon:
+   cd jCinema/backend
+   perl jCinemaBackendDaemon.pl &
+4. Launch the browser:
+   QWS_DISPLAY=directfb:bgcolor='#00000000' DFB_CONFIG_DIR=/tmp CDROM_DEVICE_NAME=/dev/sr0 CDROM_MOUNT_POINT=/cdrom ENABLE_DEV_SUPPORT=1 jCinema/binaries/WDTV/QtBrowser --dfb:no-sighandler -qws file://absolute/path/to/jCinema/webapp/jCinema.html
+
+Some notes:
+- You can kill the QtBrowser a couple of times with Ctrl-C, but eventually
+  you will run out of video memory and it won't launch. WD leaks somewhere.
+- The "Power" key on the remote is currently mapped to reload the initial URL,
+  which is great for debugging
+- You should be able to develop/debug most of jCinema on any webkit-based
+  browser. There is no proper test mode yet, that automatically disables
+  code accessing the UPnP server etc, so things can get stuck there.
