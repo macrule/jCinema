@@ -1,0 +1,30 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#view-container {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#view-container .view-pane {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#view-container .default-background {
+	/*background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #444444),color-stop(1, #111111));
+	background-attachment: fixed;*/
+	background-color: #444;
+}
