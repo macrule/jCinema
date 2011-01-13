@@ -1,0 +1,15 @@
+diff -ru qt-everywhere-opensource-src-4.7.1.orig/src/plugins/gfxdrivers/directfb/qdirectfbkeyboard.cpp qt-everywhere-opensource-src-4.7.1/src/plugins/gfxdrivers/directfb/qdirectfbkeyboard.cpp
+--- qt-everywhere-opensource-src-4.7.1.orig/src/plugins/gfxdrivers/directfb/qdirectfbkeyboard.cpp	2010-11-06 02:55:23.000000000 +0100
++++ qt-everywhere-opensource-src-4.7.1/src/plugins/gfxdrivers/directfb/qdirectfbkeyboard.cpp	2011-01-07 00:46:47.000000000 +0100
+@@ -214,6 +214,11 @@
+         if (DFB_KEY_TYPE(symbol) == DIKT_UNICODE)
+             unicode = symbol;
+ 
++#if 1
++        if (DFB_KEY_TYPE(symbol) == DIKT_SPECIAL && keycode == 0)
++            keycode = symbol;
++#endif
++
+         if (unicode != -1 || keycode != 0) {
+             bool autoRepeat = false;
+             if (press) {
