@@ -18,7 +18,8 @@ the Power key and such).
 How to install on the WDTV, running WDLXTV:
 
 1. Disable dmaosd launch in /bin/run_all-wdtvext
-2. Install QtEmbedded-4.7.1 (it should end up in /usr/local/TrollTech/Qt-4.7.1)
+2. Install QtEmbedded-4.7.1 (it should end up in
+   /usr/local/TrollTech/QtEmbedded-4.7.1)
 3. Launch the backend daemon:
    cd jCinema/backend
    perl jCinemaBackendDaemon.pl &
