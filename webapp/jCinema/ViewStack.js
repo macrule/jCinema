@@ -92,11 +92,24 @@ jCinema.ViewStack = function () {
 		// call begin() on the previous view (we know it's loaded)
 		var current = stack[stack.length - 1];
 		showView(current.viewName, current.data);
+		
+		// hide the wait indicator, in case the view forgot
+		waitIndicator(false);
+	};
+	
+	var waitIndicator = function (show) {
+		if (show === true || show === undefined) {
+			$('#waiting-view').show();
+		} else {
+			$('#waiting-view').hide();
+		}
 	};
 	
 	return {
 		pushView: pushView,
 		popView:  popView,
+		
+		waitIndicator: waitIndicator,
 	};
 	
 }();
