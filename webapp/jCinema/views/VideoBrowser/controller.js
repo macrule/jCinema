@@ -279,11 +279,13 @@ jCinema.views.VideoBrowserController = function () {
 		}, data)
 		
 		// get the available movies
+		jCinema.ViewStack.waitIndicator(true);
 		currentBrowsePath = data.browsePath;
 		items = jCinema.IMediaDirectory.getMovieList(data.browsePath);
 		if (items == null) {
 			items = [];
 		}
+		jCinema.ViewStack.waitIndicator(false);
 		
 		// initialize the view
 		populateCoverGrid(data.startIndex);
