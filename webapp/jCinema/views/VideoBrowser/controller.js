@@ -105,6 +105,19 @@ jCinema.views.VideoBrowserController = function () {
 		}
 		$('img.selected', coversUl).removeClass('selected');
 		$('li[data-item-index="' + index + '"] img', coversUl).addClass('selected');
+		
+		// show the tooltip on the bottom end of the li
+		var item = getItem(index);
+		if (item == null) {
+			return;
+		}
+		var li = $('li[data-item-index="' + index + '"]');
+		$('#title-tooltip > h3').text(item.title);
+		$('#title-tooltip').css({
+			left: li.position().left,
+			top:  li.position().top + li.outerHeight() - $('#title-tooltip').outerHeight(),
+			width: li.outerWidth(),
+		});
 	};
 	
 	function getSelectedItemIndex() {

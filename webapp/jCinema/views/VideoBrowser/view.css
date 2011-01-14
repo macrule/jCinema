@@ -34,6 +34,22 @@
 
 
 
+#VideoBrowser #title-tooltip {
+	position: absolute;
+	z-index: 50;
+	background-color: #eee;
+	padding: 5px;
+	opacity: 0.85;
+	text-align: center;
+	-webkit-border-radius: 4px;
+}
+#VideoBrowser #title-tooltip h3 {
+	margin: 0;
+}
+
+
+
+
 #VideoBrowser #movie-sheet {
 	position: fixed;
 	z-index:100;
