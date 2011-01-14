@@ -182,8 +182,23 @@ jCinema.views.VideoBrowserController = function () {
 			return false;
 		});
 		
+		// show wait indicator
+		jCinema.ViewStack.waitIndicator(true);
+		
+		// hide the actual image before it's loaded
+		var img = $('#movie-sheet img');
+		img.hide();
+		
+		// show the backdrop
 		$('#movie-sheet').css({visibility: 'visible'});
-		$('#movie-sheet img').attr('src', item.movieSheetImageUrl);
+		
+		// load the image, and show it when ready
+		img.attr('src', item.movieSheetImageUrl).load(function () {
+			img.show();
+			
+			// hide the wait indicator
+			jCinema.ViewStack.waitIndicator(false);
+		});
 	};
 	
 	function onNavigate(dCols, dRows) {
