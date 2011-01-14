@@ -9,7 +9,7 @@ use lib abs_path(dirname($0));
 use lib abs_path(dirname($0)).'/lib';
 
 use JSON::RPC::Server::Daemon;
-my $server = JSON::RPC::Server::Daemon->new(LocalPort => 8080);
+my $server = JSON::RPC::Server::Daemon->new(LocalPort => 8080, Reuse => 1);
 $server->dispatch({
 	'/jCinemaRPC'		=> 'jCinemaRPC',
 	'/jCinemaRPC/WDTV'	=> 'jCinemaRPC::WDTV',
