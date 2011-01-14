@@ -50,7 +50,7 @@ jCinema.ViewStack = function () {
 		});
 	};
 	
-	var pushView = function (viewName) {
+	var pushView = function (viewName, data) {
 		jCinema.log('Pushing view ' + viewName);
 		
 		// first end the current view
@@ -59,13 +59,13 @@ jCinema.ViewStack = function () {
 		// put the next view on the stack
 		stack.push({
 			viewName: viewName,
-			data: undefined
+			data: data
 		});
 		
 		// we MUST NOT run this directly because the CSS may not be
 		// fully loaded at that point to make layout calculations.
 		function doLoad() {
-			showView(viewName);
+			showView(viewName, data);
 		}
 		
 		// load the view if necessary
