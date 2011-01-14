@@ -52,6 +52,7 @@ sub listMovies : String(searchPath) {
  				type				=> "folder",
  				url					=> URI::file->new($path)->as_string,
  				thumbnailImageUrl	=> $thumbPath,
+ 				title				=> basename($path),
  			});
  		}
  		
@@ -84,6 +85,7 @@ sub listMovies : String(searchPath) {
  				url					=> URI::file->new($path)->as_string,
  				thumbnailImageUrl	=> $thumbPath,
  				movieSheetImageUrl	=> $sheetPath,
+ 				title				=> basename($path, $suffix),
  			});
  		}
  		
