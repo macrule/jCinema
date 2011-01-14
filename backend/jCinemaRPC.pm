@@ -3,6 +3,7 @@ package jCinemaRPC;
 use strict;
 use base qw(JSON::RPC::Procedure);
 
+use Cwd 'realpath';
 use File::Basename;
 use File::Find::Rule;
 use URI::file;
@@ -19,7 +20,29 @@ sub getUPnPHost : Public {
 	);
 }
 
-sub listMovies : String(searchPath) {
+sub applyPatternToPath : Private {
+	my ($pattern, $path) = @_;
+	
+ 	my ($name, $dirs, $suffix) = fileparse($path, qr/\.[^.]*$/);
+	
+ 	my $uri = $pattern;
+ 	$uri =~ s/\{path\}/$path/g;
+ 	$uri =~ s/\{dir\}/$dirs/g;
+ 	$uri =~ s/\{name\}/$name/g;
+ 	$uri =~ s/\{suffix\}/$suffix/g;
+ 	$uri = realpath($uri);
+ 	
+ 	if (defined $uri && -e $uri) {
+ 		$uri = URI::file->new($uri)->as_string;
+ 	} else {
+ 		$uri = undef;
+ 	}
+ 	
+ 	# returns a file uri or undef
+ 	return $uri;
+}
+
+sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPattern, movieSheetImagePathPattern) {
     my ($server, $args) = @_;
     my $searchPath = $args->{searchPath};
 	if ($searchPath =~ /^file:\/\//) {
@@ -41,18 +64,11 @@ sub listMovies : String(searchPath) {
  						->name( qr/^[^._]+/ )
  						->in($searchPath)
  						) {
- 			my $thumbPath = "${path}/folder.jpg";
- 			if (-e $thumbPath) {
- 				$thumbPath = URI::file->new($thumbPath)->as_string;
- 			} else {
- 				$thumbPath = undef;
- 			}
- 			
  			push(@folders, {
  				type				=> "folder",
  				url					=> URI::file->new($path)->as_string,
- 				thumbnailImageUrl	=> $thumbPath,
- 				title				=> basename($path),
+ 				thumbnailImageUrl	=> applyPatternToPath($args->{thumbnailImagePathPattern}, $path),
+ 				title				=> fileparse($path),
  			});
  		}
  		
@@ -64,28 +80,12 @@ sub listMovies : String(searchPath) {
  						->name( qr/\.(avi|m4v|mov|mp4|mkv)$/ )
  						->in($searchPath)
  						) {
- 			my ($filename, $directories, $suffix) = fileparse($path, qr/\.[^.]*/);
- 			my $movieSheetsPath = "${directories}/_MovieSheets/${filename}";
- 			
- 			my $thumbPath = "${movieSheetsPath}/thumb.jpg";
- 			my $sheetPath = "${movieSheetsPath}/sheet.jpg";
- 			if (-e $thumbPath) {
- 				$thumbPath = URI::file->new($thumbPath)->as_string;
- 			} else {
- 				$thumbPath = undef;
- 			}
- 			if (-e $sheetPath) {
- 				$sheetPath = URI::file->new($sheetPath)->as_string;
- 			} else {
- 				$sheetPath = undef;
- 			}
- 			
  			push(@files, {
  				type				=> "file",
  				url					=> URI::file->new($path)->as_string,
- 				thumbnailImageUrl	=> $thumbPath,
- 				movieSheetImageUrl	=> $sheetPath,
- 				title				=> basename($path, $suffix),
+ 				thumbnailImageUrl	=> applyPatternToPath($args->{thumbnailImagePathPattern}, $path),
+ 				movieSheetImageUrl	=> applyPatternToPath($args->{movieSheetImagePathPattern}, $path),
+ 				title				=> fileparse($path, qr/\.[^.]*$/),
  			});
  		}
  		

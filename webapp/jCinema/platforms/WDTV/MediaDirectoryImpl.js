@@ -26,7 +26,10 @@ jCinema.WDTV.MediaDirectoryImpl = function () {
 			path = jCinema.options.MediaSearchPath;
 		}
 		return jCinema.Utils.callBackEnd('listMovies', {
-			searchPath: path
+			searchPath: path,
+			folderImagePathPattern:     jCinema.options.FolderImagePathPattern,
+			thumbnailImagePathPattern:  jCinema.options.ThumbnailImagePathPattern,
+			movieSheetImagePathPattern: jCinema.options.MovieSheetImagePathPattern,
 		});
 	};
 	
