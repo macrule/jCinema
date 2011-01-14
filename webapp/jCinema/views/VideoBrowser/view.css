@@ -20,7 +20,9 @@
 	vertical-align: middle;
 	max-width: 150px;
 	max-height: 200px;
-	
+}
+
+#VideoBrowser ul.video-covers-grid li img.cover {
 	-webkit-box-shadow: 4px 4px 5px #000;
 }
 

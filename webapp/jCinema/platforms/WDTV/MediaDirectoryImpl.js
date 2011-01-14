@@ -21,9 +21,12 @@ jCinema.WDTV.MediaDirectoryImpl = function () {
 	};
 	
 	
-	var getMovieList = function() {
+	var getMovieList = function(path) {
+		if (path == null || path == '') {
+			path = jCinema.options.MediaSearchPath;
+		}
 		return jCinema.Utils.callBackEnd('listMovies', {
-			filePath: jCinema.options.MediaSearchPath
+			searchPath: path
 		});
 	};
 	

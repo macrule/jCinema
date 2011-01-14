@@ -24,6 +24,7 @@ jCinema.views.VideoBrowserController = function () {
 	var numColumns;
 	var numRows;
 	var items;
+	var currentBrowsePath;
 	var currentFirstItem;
 	
 	// private helper methods
@@ -73,7 +74,21 @@ jCinema.views.VideoBrowserController = function () {
 			n = items.length - startIndex;
 		}
 		for (var i = startIndex; i < (startIndex + n); i++) {
-			coversUl.append('<li data-item-index="' + i + '"><img src="' + getItem(i).coverImageUrl + '"/></li>');
+			var item = getItem(i);
+			coversUl.append('<li data-item-index="' + i + '"><img src=""/></li>');
+			var img = $('li:last img', coversUl);
+			
+			if (item.thumbnailImageUrl == null) {
+				// use default icon
+				if (item.type == 'folder') {
+					img.attr('src', 'jCinema/images/folder-icon.png');
+				} else if (item.type == 'file') {
+					img.attr('src', 'jCinema/images/video-icon.png');
+				}
+			} else {
+				img.attr('src', item.thumbnailImageUrl).addClass('cover');
+			}
+			
 		}
 		
 		// make the ul just wide enough to fit all columns
@@ -109,14 +124,23 @@ jCinema.views.VideoBrowserController = function () {
 		return items[index];
 	};
 	
-	function showMovieSheetFor(index) {
+	function activateItemAt(index) {
+		var item = getItem(index);
+		if (item.type == 'folder') {
+			jCinema.ViewStack.pushView('VideoBrowser', { browsePath: item.url });
+		} else if (item.type == 'file') {
+			showMovieSheet(item);
+		}
+	};
+	
+	function showMovieSheet(item) {
 		jCinema.IKeyHandler.pushHandler(function (keyEvt) {
 			var goBack = false;
 			if (keyEvt.type === jCinema.IKeyHandler.KeyEvent.Enter ||
 				keyEvt.type === jCinema.IKeyHandler.KeyEvent.Play ||
 				keyEvt.type === jCinema.IKeyHandler.KeyEvent.PlayPause) {
 				// enter and play button plays
-				if (jCinema.IVideoControl.select(getItem(index).mediaUrl) &&
+				if (jCinema.IVideoControl.select(item.url) &&
 					jCinema.IVideoControl.play()) {
 					jCinema.IKeyHandler.popHandler(); // get rid of this keyhandler
 					jCinema.ViewStack.pushView('VideoView');
@@ -135,8 +159,9 @@ jCinema.views.VideoBrowserController = function () {
 			// don't let anyone else handle key events
 			return false;
 		});
+		
 		$('#movie-sheet').show();
-		$('#movie-sheet img').attr('src', getItem(index).movieSheetImageUrl);
+		$('#movie-sheet img').attr('src', item.movieSheetImageUrl);
 	};
 	
 	function onNavigate(dCols, dRows) {
@@ -182,7 +207,7 @@ jCinema.views.VideoBrowserController = function () {
 				return false;
 				
 			case jCinema.IKeyHandler.KeyEvent.Enter:
-				showMovieSheetFor(getSelectedItemIndex());
+				activateItemAt(getSelectedItemIndex());
 				return false;
 				
 			default:
@@ -209,20 +234,23 @@ jCinema.views.VideoBrowserController = function () {
 			selectItemAt(index);
 		});
 		
+		// merge passed in data with defaults
+		data = $.extend({
+			browsePath: undefined,
+			startIndex: 0,
+			selectedIndex: 0
+		}, data)
+		
 		// get the available movies
-		items = jCinema.IMediaDirectory.getMovieList();
+		currentBrowsePath = data.browsePath;
+		items = jCinema.IMediaDirectory.getMovieList(data.browsePath);
 		if (items == null) {
 			items = [];
 		}
 		
 		// initialize the view
-		if (data === undefined) {
-			populateCoverGrid(0);
-			selectItemAt(0);
-		} else {
-			populateCoverGrid(data.startIndex);
-			selectItemAt(data.selectedIndex);
-		}
+		populateCoverGrid(data.startIndex);
+		selectItemAt(data.selectedIndex);
 	};
 	
 	// the main function called when the view becomes inactive
@@ -232,6 +260,7 @@ jCinema.views.VideoBrowserController = function () {
 		// return current selection and startIndex, so we
 		// can restore it after video play
 		return {
+			browsePath:    currentBrowsePath,
 			startIndex:    currentFirstItem,
 			selectedIndex: getSelectedItemIndex(),
 		};
