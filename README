@@ -28,9 +28,8 @@ How to install on the WDTV, running WDLXTV:
 
 
 Thumbnails and Movie sheets:
-You will most likely have to change the paths to thumbnails and movie sheets.
-Currently they are searched for in {Movie dir}/_MovieSheets/{Movie file name without extension}/thumb.jpg and {Movie dir}/_MovieSheets/{Movie file name without extension}/sheet.jpg
-The code responsible for that is in backend/jCinemaRPC.pm.
+You will most likely have to change the paths to thumbnails and movie sheets. All paths are defined as patterns. Look in jCinema.options in jCinema.js for how it
+works, and what is right for your setup.
 
 Some notes:
 - You can kill the QtBrowser a couple of times with Ctrl-C, but eventually
@@ -40,4 +39,4 @@ Some notes:
 - You should be able to develop/debug most of jCinema on any webkit-based
   browser. There is no proper test mode yet, that automatically disables
   code accessing the UPnP server etc, so things can get stuck there.
-- Currently multiple levels of directories are not supported.
+- SVGs don't seem to be a good idea at this point. QtBrowser crashes quickly.
