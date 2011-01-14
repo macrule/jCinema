@@ -174,7 +174,7 @@ jCinema.views.VideoBrowserController = function () {
 			
 			if (goBack) {
 				$('#movie-sheet img').attr('src', '');
-				$('#movie-sheet').hide();
+				$('#movie-sheet').css({visibility: 'hidden'});
 				jCinema.IKeyHandler.popHandler();
 			}
 			
@@ -182,7 +182,7 @@ jCinema.views.VideoBrowserController = function () {
 			return false;
 		});
 		
-		$('#movie-sheet').show();
+		$('#movie-sheet').css({visibility: 'visible'});
 		$('#movie-sheet img').attr('src', item.movieSheetImageUrl);
 	};
 	
