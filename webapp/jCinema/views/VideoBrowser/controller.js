@@ -209,19 +209,6 @@ jCinema.views.VideoBrowserController = function () {
 			selectItemAt(index);
 		});
 		
-		/*
-		// for testing
-		items = [];
-		for (var i = 40; i <= 350; i++) {
-			items.push({
-				coverImageUrl:      'moviesheet-test/'+i+'.jpg',
-				movieSheetImageUrl: 'moviesheet-test/2012.avi_sheet.jpg',
-				mediaUrl:           'file:///tmp/media/usb/USBKEY/test.avi',
-				metaData:			{},
-			});
-		}
-		*/
-		
 		// get the available movies
 		items = jCinema.IMediaDirectory.getMovieList();
 		if (items == null) {
