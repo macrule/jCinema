@@ -26,6 +26,12 @@ How to install on the WDTV, running WDLXTV:
 4. Launch the browser:
    QWS_DISPLAY=directfb:bgcolor='#00000000' DFB_CONFIG_DIR=/tmp CDROM_DEVICE_NAME=/dev/sr0 CDROM_MOUNT_POINT=/cdrom ENABLE_DEV_SUPPORT=1 jCinema/binaries/WDTV/QtBrowser --dfb:no-sighandler -qws file://absolute/path/to/jCinema/webapp/jCinema.html
 
+
+Thumbnails and Movie sheets:
+You will most likely have to change the paths to thumbnails and movie sheets.
+Currently they are searched for in {Movie dir}/_MovieSheets/{Movie file name without extension}/thumb.jpg and {Movie dir}/_MovieSheets/{Movie file name without extension}/sheet.jpg
+The code responsible for that is in backend/jCinemaRPC.pm.
+
 Some notes:
 - You can kill the QtBrowser a couple of times with Ctrl-C, but eventually
   you will run out of video memory and it won't launch. WD leaks somewhere.
@@ -34,3 +40,4 @@ Some notes:
 - You should be able to develop/debug most of jCinema on any webkit-based
   browser. There is no proper test mode yet, that automatically disables
   code accessing the UPnP server etc, so things can get stuck there.
+- Currently multiple levels of directories are not supported.
