@@ -134,6 +134,15 @@ jCinema.views.VideoBrowserController = function () {
 	};
 	
 	function showMovieSheet(item) {
+		if (item.movieSheetImageUrl == null) {
+			// if there is no movie sheet, play the item directly
+			if (jCinema.IVideoControl.select(item.url) &&
+				jCinema.IVideoControl.play()) {
+				jCinema.ViewStack.pushView('VideoView');
+			}
+			return;
+		}
+		
 		jCinema.IKeyHandler.pushHandler(function (keyEvt) {
 			var goBack = false;
 			if (keyEvt.type === jCinema.IKeyHandler.KeyEvent.Enter ||
