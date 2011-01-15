@@ -20,24 +20,10 @@ jCinema.WDTV.MediaDirectoryImpl = function () {
 		return true;
 	};
 	
-	
-	var getMovieList = function(path) {
-		if (path == null || path == '') {
-			path = jCinema.options.MediaSearchPath;
-		}
-		return jCinema.Utils.callBackEnd('listMovies', {
-			searchPath: path,
-			folderImagePathPattern:     jCinema.options.FolderImagePathPattern,
-			thumbnailImagePathPattern:  jCinema.options.ThumbnailImagePathPattern,
-			movieSheetImagePathPattern: jCinema.options.MovieSheetImagePathPattern,
-		});
-	};
-	
+	// currently no special implementation
 	
 	return {
 		init: init,
-		
-		getMovieList: getMovieList,
 	};
 	
 }();

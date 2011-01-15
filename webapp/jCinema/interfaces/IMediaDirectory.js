@@ -21,10 +21,17 @@ jCinema.IMediaDirectory = function () {
 	};
 	
 	
-	var getMovieList = function() {
-		// unimplemented, override per platform
-		jCinema.notImplemented('jCinema.IMediaDirectory.getMovieList');
-		return [];
+	var getMovieList = function(path) {
+		// default implementation, using the default backend code
+		if (path == null || path == '') {
+			path = jCinema.options.MediaSearchPath;
+		}
+		return jCinema.Utils.callBackEnd('listMovies', {
+			searchPath: path,
+			folderImagePathPattern:     jCinema.options.FolderImagePathPattern,
+			thumbnailImagePathPattern:  jCinema.options.ThumbnailImagePathPattern,
+			movieSheetImagePathPattern: jCinema.options.MovieSheetImagePathPattern,
+		});
 	};
 	
 	
