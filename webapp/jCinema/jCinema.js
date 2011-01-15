@@ -16,7 +16,6 @@
 
 // Gloabl Namespace for this project
 var jCinema = {}
-jCinema.WDTV = {}
 jCinema.views = {}
 
 
