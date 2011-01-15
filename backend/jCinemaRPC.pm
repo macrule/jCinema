@@ -8,6 +8,7 @@ use Encode;
 use File::Basename;
 use File::Find::Rule;
 use URI::file;
+use URI::Escape;
 
 
 our $cachedMovieList = ();
@@ -47,7 +48,7 @@ sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPa
     my ($server, $args) = @_;
     my $searchPath = $args->{searchPath};
 	if ($searchPath =~ /^file:\/\//) {
-		$searchPath = URI->new($searchPath)->path;
+		$searchPath = uri_unescape(URI->new($searchPath)->path);
 	}
 	
 	print "listMovies start $searchPath\n";
