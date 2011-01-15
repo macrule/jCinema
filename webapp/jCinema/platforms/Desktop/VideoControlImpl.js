@@ -43,6 +43,7 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 				videoElement.attr('src', currentMediaSrc);
 			}
 			videoElement.get(0).play();
+			videoElement.attr('playbackRate', 1);
 			videoElement.attr('volume', 0);
 		} else {
 			playPending = true;
@@ -62,11 +63,13 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 	};
 	
 	var fastForward = function (speed) {
-		return false;
+		videoElement.attr('playbackRate', speed);
+		return true;
 	};
 	
 	var reverse = function (speed) {
-		return false;
+		videoElement.attr('playbackRate', -speed);
+		return true;
 	};
 	
 	
@@ -75,22 +78,33 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 	
 	// return a list of speeds that can be used with fastForward()
 	var getAvailableFastForwardSpeeds = function () {
-		return [ ];
+		return [ 2, 4, 8, 16, 32, 64 ];
 	}
 	
 	// return a list of speeds that can be used with reverse()
 	var getAvailableReverseSpeeds = function () {
-		return [ ];
+		return [ 2, 4, 8, 16, 32, 64 ];
 	}
 	
 	// return the current status as an array with two
 	// elements [PlayMode, Speed]
 	var getPlayMode = function () {
+		var speed = parseInt(videoElement.attr('playbackRate'), 10);
+		var mode = jCinema.IVideoControl.PlayMode.Stopped;
 		if (videoElement.attr('paused')) {
-			return [ jCinema.IVideoControl.PlayMode.Paused, 0 ];
+			mode = jCinema.IVideoControl.PlayMode.Paused
+			speed = 0;
 		} else {
-			return [ jCinema.IVideoControl.PlayMode.Playing, 1 ];
+			if (speed < 0) {
+				mode = jCinema.IVideoControl.PlayMode.Reverse;
+				speed = -speed;
+			} else if (speed > 1) {
+				mode = jCinema.IVideoControl.PlayMode.FastForward;
+			} else {
+				mode = jCinema.IVideoControl.PlayMode.Playing
+			}
 		}
+		return [ mode, speed ];
 	};
 	
 	// returns the current position of the seek head
