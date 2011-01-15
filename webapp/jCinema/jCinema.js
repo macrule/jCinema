@@ -15,8 +15,8 @@
 
 
 // Gloabl Namespace for this project
-var jCinema = {}
-jCinema.views = {}
+var jCinema = {};
+jCinema.views = {};
 
 
 // we use these lists to load all necessary javascript files
