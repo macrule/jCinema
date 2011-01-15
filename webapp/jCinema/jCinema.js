@@ -16,6 +16,7 @@
 
 // Gloabl Namespace for this project
 var jCinema = {};
+jCinema.platform = {};
 jCinema.views = {};
 
 
@@ -95,7 +96,7 @@ jCinema.initPlatform = function (name, opts) {
 		jCinema.includeJS('jCinema/platforms/' + name + '/' + jCinema.interfaceNames[i] + 'Impl.js');
 	}
 	
-	var implementation = jCinema[name];
+	var implementation = jCinema.platform[name];
 	if (implementation === undefined) {
 		jCinema.error('Illegal platform value: ' + name);
 		return false;
@@ -114,8 +115,8 @@ jCinema.initPlatform = function (name, opts) {
 		}
 	}
 	
-	// give the platform a chance to initialize itself
-	jCinema[name].init(opts);
+	// give the interface a chance to initialize itself
+	jCinema.platform[name].init(opts);
 };
 
 // include all necessary js files
@@ -139,6 +140,7 @@ jCinema.IKeyHandler.pushHandler(jCinema.Utils.reloadPageAndCss, jCinema.IKeyHand
 $(function() {
 	
 	jCinema.options = {
+		//Platform:		'Desktop',
 		Platform:		'WDTV',
 		BackEndHost:	'127.0.0.1:8080',
 		MediaSearchPath: '/tmp/media/usb',

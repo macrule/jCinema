@@ -14,7 +14,7 @@
  */
 
 
-jCinema.WDTV.MediaDirectoryImpl = function () {
+jCinema.platform.WDTV.MediaDirectoryImpl = function () {
 	
 	var init = function (opts) {
 		return true;

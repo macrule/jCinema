@@ -14,9 +14,9 @@
  */
 
 
-jCinema.WDTV = {};
+jCinema.platform.WDTV = {};
 
-jCinema.WDTV.init = function (opts) {
+jCinema.platform.WDTV.init = function (opts) {
 	// set the WDTV's UPnP server address
 	jCinema.UPnP.options.host = jCinema.Utils.callBackEnd('getUPnPHost');
 };

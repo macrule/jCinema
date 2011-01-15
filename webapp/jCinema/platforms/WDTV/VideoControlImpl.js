@@ -17,7 +17,7 @@
 // Implementation of jCinema.IVideoControl for use with the
 // WDTV media player.
 
-jCinema.WDTV.VideoControlImpl = function () {
+jCinema.platform.WDTV.VideoControlImpl = function () {
 	
 	var init = function (opts) {
 		return true;

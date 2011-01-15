@@ -14,7 +14,7 @@
  */
 
 
-jCinema.WDTV.KeyHandlerImpl = function () {
+jCinema.platform.WDTV.KeyHandlerImpl = function () {
 	
 	var mapKeyEventTojCinemaEvent = function (keyEvent) {
 		if (keyEvent.originalEvent.keyIdentifier == 'U+F00F') return jCinema.IKeyHandler.KeyEvent.Power;
