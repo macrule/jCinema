@@ -68,17 +68,21 @@ jCinema.includeJS = function (file) {
 // this function dynamically loads the given css file
 jCinema.includeCSS = function (file, onComplete) {
 	jCinema.debug('loading CSS ' + file);
-	// this is somewhat tricky:
-	// we need to call onComplete only when the CSS has been loaded. we could
+	// This is somewhat tricky:
+	// We need to call onComplete only when the CSS has been loaded. we could
 	// achieve that by loading the file and injecting it into "head". but then
 	// relative url()'s in the css will fail.
 	// by putting a <link> into "head" such url()'s work fine, but we never
 	// know when the CSS is loaded.
-	// so as a solution we now load the css, to make sure it's in the cache,
-	// and then add the <link> tag and call our completion handler.
-	$.get(file, function (css) {
-		$('head').append('<link type="text/css" rel="stylesheet" href="'+file+'?'+(new Date().valueOf())+'" />');
-		onComplete();
+	// So as a solution we now load the css, to make sure it's in the cache,
+	// and then add the <link> tag and call our completion handler after a short
+	// wait period.
+	// We choose a dynamic filename, to ensure browsers always reload modified
+	// CSS files during development.
+	var dynamicName = file+'?'+(new Date().valueOf());
+	$.get(dynamicName, function () {
+		$('head').append('<link type="text/css" rel="stylesheet" href="'+dynamicName+'" />');
+		setTimeout(onComplete, 250);
 	});
 }
 
