@@ -4,6 +4,7 @@ use strict;
 use base qw(JSON::RPC::Procedure);
 
 use Cwd 'realpath';
+use Encode;
 use File::Basename;
 use File::Find::Rule;
 use URI::file;
@@ -64,6 +65,9 @@ sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPa
  						->name( qr/^[^._]+/ )
  						->in($searchPath)
  						) {
+ 			# we expect paths to be in UTF-8 encoding
+ 			$path = Encode::decode("UTF-8", $path);
+ 			
  			push(@folders, {
  				type				=> "folder",
  				url					=> URI::file->new($path)->as_string,
@@ -80,6 +84,9 @@ sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPa
  						->name( qr/\.(avi|m4v|mov|mp4|mkv)$/ )
  						->in($searchPath)
  						) {
+ 			# we expect paths to be in UTF-8 encoding
+ 			$path = Encode::decode("UTF-8", $path);
+ 			
  			push(@files, {
  				type				=> "file",
  				url					=> URI::file->new($path)->as_string,
