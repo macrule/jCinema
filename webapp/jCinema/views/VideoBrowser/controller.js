@@ -92,19 +92,28 @@ jCinema.views.VideoBrowserController = function () {
 				$(liTag).insertBefore($('li[data-item-index="' + currentFirstItem + '"]', coversUl));
 			}
 			
+			// always start with the default icon
 			var item = getItem(i);
 			var img = $('li[data-item-index="' + i + '"]>img', coversUl);
-			if (item.thumbnailImageUrl == null) {
-				// use default icon
-				if (item.type == 'folder') {
-					img.attr('src', 'jCinema/images/folder-icon.png');
-				} else if (item.type == 'file') {
-					img.attr('src', 'jCinema/images/video-icon.png');
-				}
-			} else {
-				img.attr('src', item.thumbnailImageUrl).addClass('cover');
+			if (item.type == 'folder') {
+				img.attr('src', 'jCinema/images/folder-icon.png');
+			} else if (item.type == 'file') {
+				img.attr('src', 'jCinema/images/video-icon.png');
 			}
 			
+			// and exchange it with the real one as as soon as it's loaded.
+			// this is to prevent "empty" pages if the images are slow to load.
+			if (item.thumbnailImageUrl != null) {
+				$('<img />').attr('src', item.thumbnailImageUrl).addClass('cover').load(function(i) {
+					// we have to define the function this way, to make
+					// sure the current(!) value of "i" becomes part of
+					// the anonymous function, and not the value at time
+					// of function execution.
+					return function () {
+						var tmpImg = $('li[data-item-index="' + i + '"]>img', coversUl);
+						tmpImg.attr('src', $(this).attr('src')).addClass($(this).attr('className'));
+					}}(i));
+			}
 		}
 		
 		// make the ul just wide enough to fit all columns
