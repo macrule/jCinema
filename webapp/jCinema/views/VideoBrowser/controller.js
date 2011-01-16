@@ -65,19 +65,35 @@ jCinema.views.VideoBrowserController = function () {
 		startIndex = Math.min(startIndex, maxStartIndex);
 		startIndex = Math.max(startIndex, 0);
 		
-		// clear all li's
-		coversUl.empty();
+		// endIndex is really +1 the last shown index
+		var endIndex = startIndex + (getNumRows() * getNumColumns());
+		endIndex = Math.min(endIndex, items.length);
 		
-		// add new li's
-		var n = getNumRows() * getNumColumns();
-		if ((startIndex + n) >= items.length) {
-			n = items.length - startIndex;
-		}
-		for (var i = startIndex; i < (startIndex + n); i++) {
-			var item = getItem(i);
-			coversUl.append('<li data-item-index="' + i + '"><img src=""/></li>');
-			var img = $('li:last img', coversUl);
+		if (currentFirstItem !== undefined) {
+			// delete all li's up to start index
+			for (var i = currentFirstItem; i < startIndex; i++) {
+				$('li[data-item-index="' + i + '"]', coversUl).remove();
+			}
 			
+			// delete all li's after end index
+			$('li[data-item-index="' + endIndex + '"] ~ li', coversUl).remove();
+		}
+		
+		// add li's after start index, unless they exist already
+		for (var i = startIndex; i < endIndex; i++) {
+			if ($('li[data-item-index="' + i + '"]', coversUl).size() > 0) {
+				continue;
+			}
+			
+			var liTag = '<li data-item-index="' + i + '"><img src=""/></li>';
+			if (currentFirstItem === undefined || startIndex > currentFirstItem) {
+				coversUl.append(liTag);
+			} else {
+				$(liTag).insertBefore($('li[data-item-index="' + currentFirstItem + '"]', coversUl));
+			}
+			
+			var item = getItem(i);
+			var img = $('li[data-item-index="' + i + '"]>img', coversUl);
 			if (item.thumbnailImageUrl == null) {
 				// use default icon
 				if (item.type == 'folder') {
@@ -289,6 +305,7 @@ jCinema.views.VideoBrowserController = function () {
 		jCinema.ViewStack.waitIndicator(false);
 		
 		// initialize the view
+		currentFirstItem = undefined;
 		populateCoverGrid(data.startIndex);
 		selectItemAt(data.selectedIndex);
 	};
