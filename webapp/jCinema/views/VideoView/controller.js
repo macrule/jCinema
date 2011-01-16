@@ -59,6 +59,11 @@ jCinema.views.VideoViewController = function () {
 			seekSlider.slider('option', 'max', mediaInfo.durationSeconds);
 		}
 		if (mediaPos != null) {
+			// hide the intial wait indicator
+			if (mediaPos > 0) {
+				jCinema.ViewStack.waitIndicator(false);
+			}
+			
 			seekSlider.slider('value', mediaPos);
 			timePositionText.text(jCinema.Utils.convertSecondsToTimeCode(mediaPos, true));
 		}
@@ -231,6 +236,11 @@ jCinema.views.VideoViewController = function () {
 		
 		// create the seek slider UI (jquery)
 		seekSlider.slider();
+		
+		// show the wait indicator, because it can take a while
+		// for the movie to load. we hide it again when the timer
+		// goes past zero seconds.
+		jCinema.ViewStack.waitIndicator(true);
 		
 		resetInactivityPeriodStart();
 		
