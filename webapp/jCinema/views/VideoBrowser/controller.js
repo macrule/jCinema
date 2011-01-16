@@ -222,7 +222,8 @@ jCinema.views.VideoBrowserController = function () {
 		selectItemAt(newIndex);
 	};
 	
-	function onKey(keyEvt) {
+	// ViewStack installs a handler for this
+	var onKey = function (keyEvt) {
 		switch (keyEvt.type) {
 			case jCinema.IKeyHandler.KeyEvent.Up:
 				onNavigate( 0, -1);
@@ -255,9 +256,6 @@ jCinema.views.VideoBrowserController = function () {
 	// the main function called when the view becomes active
 	var begin = function (data) {
 		coversUl = $('#covers-area ul:first');
-		
-		// we want to get key events
-		jCinema.IKeyHandler.pushHandler(onKey);
 		
 		// make sure we recalculate our layout on resize
 		$(window).resize(function () {
@@ -294,8 +292,6 @@ jCinema.views.VideoBrowserController = function () {
 	
 	// the main function called when the view becomes inactive
 	var end = function () {
-		jCinema.IKeyHandler.popHandler();
-		
 		// return current selection and startIndex, so we
 		// can restore it after video play
 		return {
@@ -307,7 +303,8 @@ jCinema.views.VideoBrowserController = function () {
 	
 	return {
 		begin: begin,
-		end: end
+		end:   end,
+		onKey: onKey,
 	};
 	
 }();

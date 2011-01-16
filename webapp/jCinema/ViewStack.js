@@ -19,12 +19,25 @@ jCinema.ViewStack = function () {
 	var stack = [];
 	
 	function beginView(viewName, data) {
-		jCinema.views[viewName + 'Controller'].begin(data);
+		// push a key handler for the view
+		var controller = jCinema.views[viewName + 'Controller'];
+		if (controller.onKey) {
+			jCinema.IKeyHandler.pushHandler(controller.onKey);
+		} else {
+			// a dummy key handler, so we can pop it later unconditionally
+			jCinema.IKeyHandler.pushHandler(function () { return true; });
+		}
+		
+		// and let it begin its work
+		controller.begin(data);
 	};
 	
 	function endCurrentView() {
 		// end the current view first
 		if (stack.length > 0) {
+			// pop the key handler we installed
+			jCinema.IKeyHandler.popHandler();
+			
 			// let the end() function provide data,
 			// that will be passed to begin() next
 			// time

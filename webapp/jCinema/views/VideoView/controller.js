@@ -183,7 +183,8 @@ jCinema.views.VideoViewController = function () {
 		}
 	}
 	
-	function onKey(keyEvt) {
+	// ViewStack installs a handler for this
+	var onKey = function (keyEvt) {
 		showUI();
 		resetInactivityPeriodStart();
 		
@@ -231,9 +232,6 @@ jCinema.views.VideoViewController = function () {
 		// create the seek slider UI (jquery)
 		seekSlider.slider();
 		
-		// we want to get key events
-		jCinema.IKeyHandler.pushHandler(onKey);
-		
 		resetInactivityPeriodStart();
 		
 		timer = setTimeout(idleHandler, idleInterval);
@@ -254,7 +252,6 @@ jCinema.views.VideoViewController = function () {
 	
 	var end = function () {
 		clearTimeout(timer);
-		jCinema.IKeyHandler.popHandler();
 		jCinema.IVideoControl.stop();
 		
 		if (jCinema.IVideoControl.setVideoElement) {
@@ -264,7 +261,8 @@ jCinema.views.VideoViewController = function () {
 	
 	return {
 		begin: begin,
-		end: end
+		end:   end,
+		onKey: onKey,
 	};
 	
 }();
