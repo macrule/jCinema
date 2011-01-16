@@ -176,6 +176,9 @@ jCinema.views.VideoBrowserController = function () {
 				$('#movie-sheet img').attr('src', '');
 				$('#movie-sheet').css({visibility: 'hidden'});
 				jCinema.IKeyHandler.popHandler();
+				
+				// if the back button is pressed before the image has loaded
+				jCinema.ViewStack.waitIndicator(false);
 			}
 			
 			// don't let anyone else handle key events
