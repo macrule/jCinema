@@ -40,3 +40,25 @@ Some notes:
   browser. There is no proper test mode yet, that automatically disables
   code accessing the UPnP server etc, so things can get stuck there.
 - SVGs don't seem to be a good idea at this point. QtBrowser crashes quickly.
+
+The "Desktop" platform:
+This implementation is mainly for development. You can enable it by setting
+jCinema.options.Platform = "Desktop" in jCinema.js. Video playing is implemented
+by using an HTML5 video tag and should work at least for h264 files. Audio is
+by default muted because it annoyed me during testing.
+You still need a locally running backend daemon for this platform to work.
+The key mapping for the Desktop platform is like this:
+- Esc or Backspace: Back
+- Space bar: Play/Pause
+- Return: Enter
+- Cursor keys: Up/Down/Left/Right
+- O: Option
+- P: Power
+- Home key or H: Home
+- T: Stop
+- F: Fast forward
+- R: Reverse
+- E: Eject
+- S: Search
+- B or Page up: Previous
+- N or Page down: Next
