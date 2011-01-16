@@ -138,22 +138,12 @@ jCinema.IKeyHandler.pushHandler(jCinema.Utils.reloadPageAndCss, jCinema.IKeyHand
 
 // this launches everything when the main html has loaded
 $(function() {
+	// load default options
+	jCinema.options = {};
+	jCinema.includeJS('jCinema/config.defaults.js');
 	
-	jCinema.options = {
-		//Platform:		'Desktop',
-		Platform:		'WDTV',
-		BackEndHost:	'127.0.0.1:8080',
-		MediaSearchPath: '/tmp/media/usb',
-		
-		// these macros are available for patterns:
-		//  - {path}   full path to folder or movie
-		//  - {dir}    full path to parent directory of folder or movie
-		//  - {name}   file name without suffix
-		//  - {suffix} file suffix including the dot
-		FolderImagePathPattern:     '{path}/folder.jpg',
-		ThumbnailImagePathPattern:  '{dir}/_MovieSheets/{name}/thumb.jpg',
-		MovieSheetImagePathPattern: '{dir}/_MovieSheets/{name}/sheet.jpg',
-	};
+	// allow overriding options in config
+	jCinema.includeJS('config.js');
 	
 	jCinema.initPlatform(jCinema.options.Platform, jCinema.options);
 	jCinema.ViewStack.pushView('VideoBrowser');
