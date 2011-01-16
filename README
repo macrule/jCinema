@@ -24,7 +24,7 @@ How to install on the WDTV, running WDLXTV:
    cd jCinema/backend
    perl jCinemaBackendDaemon.pl &
 4. Launch the browser:
-   QWS_DISPLAY=directfb:bgcolor='#00000000' DFB_CONFIG_DIR=/tmp CDROM_DEVICE_NAME=/dev/sr0 CDROM_MOUNT_POINT=/cdrom ENABLE_DEV_SUPPORT=1 jCinema/binaries/WDTV/QtBrowser --dfb:no-sighandler -qws file://absolute/path/to/jCinema/webapp/jCinema.html
+   LC_ALL=en_US.UTF-8 QWS_DISPLAY=directfb:bgcolor='#00000000' DFB_CONFIG_DIR=/tmp CDROM_DEVICE_NAME=/dev/sr0 CDROM_MOUNT_POINT=/cdrom ENABLE_DEV_SUPPORT=1 jCinema/binaries/WDTV/QtBrowser --dfb:no-sighandler -qws file://absolute/path/to/jCinema/webapp/jCinema.html
 
 
 Thumbnails and Movie sheets:
@@ -40,6 +40,9 @@ Some notes:
   browser. There is no proper test mode yet, that automatically disables
   code accessing the UPnP server etc, so things can get stuck there.
 - SVGs don't seem to be a good idea at this point. QtBrowser crashes quickly.
+- If non-ASCII characters in movie titles don't work for you, make sure you
+  have the en_US.UTF-8 locale available, that LC_ALL is set to it for QtBrowser,
+  and that you have mounted your movie share with -o iocharset=utf8
 
 The "Desktop" platform:
 This implementation is mainly for development. You can enable it by setting
