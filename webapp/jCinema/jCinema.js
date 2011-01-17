@@ -145,6 +145,8 @@ $(function() {
 	// allow overriding options in config
 	jCinema.includeJS('config.js');
 	
+	$('#loading-screen').append('<h3>Platform: '+jCinema.options.Platform+'</h3>');
+	
 	jCinema.initPlatform(jCinema.options.Platform, jCinema.options);
 	jCinema.ViewStack.pushView('VideoBrowser');
 });

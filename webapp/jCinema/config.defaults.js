@@ -1,6 +1,6 @@
 $.extend(jCinema.options, {
 	// Currently allowed values are WDTV and Desktop.
-	Platform:		'WDTV',
+	Platform:		(navigator.userAgent.indexOf('QtEmbedded') != -1) ? 'WDTV' : 'Desktop',
 	
 	// The host and port on which the backend daemon is listening.
 	// Unless you modified that leave this as is.
