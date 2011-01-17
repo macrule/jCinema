@@ -23,28 +23,31 @@ sub getUPnPHost : Public {
 }
 
 sub applyPatternToPath : Private {
-	my ($pattern, $path) = @_;
+	my ($pattern, $path, $separator) = @_;
 	
+	my $returnVal = undef;
+
  	my ($name, $dirs, $suffix) = fileparse($path, qr/\.[^.]*$/);
+
+	my @patterns = split(/$separator/,$pattern);
 	
- 	my $uri = $pattern;
- 	$uri =~ s/\{path\}/$path/g;
- 	$uri =~ s/\{dir\}/$dirs/g;
- 	$uri =~ s/\{name\}/$name/g;
- 	$uri =~ s/\{suffix\}/$suffix/g;
- 	$uri = realpath($uri);
- 	
- 	if (defined $uri && -e $uri) {
- 		$uri = URI::file->new($uri)->as_string;
- 	} else {
- 		$uri = undef;
- 	}
- 	
+	for my $uri (@patterns) {
+ 	 	$uri =~ s/\{path\}/$path/g;
+	 	$uri =~ s/\{dir\}/$dirs/g;
+	 	$uri =~ s/\{name\}/$name/g;
+	 	$uri =~ s/\{suffix\}/$suffix/g;
+	 	$uri = realpath($uri);
+	 	if (defined $uri && -e $uri) {
+	 		$returnVal = URI::file->new($uri)->as_string;
+			last;
+	 	} 
+	}
+
  	# returns a file uri or undef
- 	return $uri;
+ 	return $returnVal;
 }
 
-sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPattern, movieSheetImagePathPattern) {
+sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPattern, movieSheetImagePathPattern, patternSeparator) {
     my ($server, $args) = @_;
     my $searchPath = $args->{searchPath};
 	if ($searchPath =~ /^file:\/\//) {
@@ -72,7 +75,7 @@ sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPa
  			push(@folders, {
  				type				=> "folder",
  				url					=> URI::file->new($path)->as_string,
- 				thumbnailImageUrl	=> applyPatternToPath($args->{thumbnailImagePathPattern}, $path),
+ 				thumbnailImageUrl	=> applyPatternToPath($args->{folderImagePathPattern}, $path, $args->{patternSeparator}),
  				title				=> fileparse($path),
  			});
  		}
@@ -82,7 +85,7 @@ sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPa
  						->extras({ follow_fast => 1 })
  						->maxdepth(1)
  						->file
- 						->name( qr/\.(avi|m4v|mov|mp4|mkv)$/ )
+ 						->name( qr/\.(avi|m4v|mov|mp4|mkv|ts|iso|vob)$/ )
  						->in($searchPath)
  						) {
  			# we expect paths to be in UTF-8 encoding
@@ -91,8 +94,8 @@ sub listMovies : String(searchPath, folderImagePathPattern, thumbnailImagePathPa
  			push(@files, {
  				type				=> "file",
  				url					=> URI::file->new($path)->as_string,
- 				thumbnailImageUrl	=> applyPatternToPath($args->{thumbnailImagePathPattern}, $path),
- 				movieSheetImageUrl	=> applyPatternToPath($args->{movieSheetImagePathPattern}, $path),
+ 				thumbnailImageUrl	=> applyPatternToPath($args->{thumbnailImagePathPattern}, $path, $args->{patternSeparator}),
+ 				movieSheetImageUrl	=> applyPatternToPath($args->{movieSheetImagePathPattern}, $path, $args->{patternSeparator}),
  				title				=> fileparse($path, qr/\.[^.]*$/),
  			});
  		}
