@@ -47,7 +47,7 @@ jCinema.IKeyHandler = function () {
 		Option:      'jCinema.KeyEvent.Option',
 		Search:      'jCinema.KeyEvent.Search',
 		
-		Power:       'jCinema.KeyEvent.Power',
+		Power:       'jCinema.KeyEvent.Power'
 	};
 	
 	var eventHandlerStack = [

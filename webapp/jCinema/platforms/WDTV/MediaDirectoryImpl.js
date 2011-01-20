@@ -23,7 +23,7 @@ jCinema.platform.WDTV.MediaDirectoryImpl = function () {
 	// currently no special implementation
 	
 	return {
-		init: init,
+		init: init
 	};
 	
 }();

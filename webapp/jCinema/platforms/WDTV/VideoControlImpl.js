@@ -64,12 +64,12 @@ jCinema.platform.WDTV.VideoControlImpl = function () {
 	// return a list of speeds that can be used with fastForward()
 	var getAvailableFastForwardSpeeds = function () {
 		return [ 2, 4, 8, 16, 32, 64 ];
-	}
+	};
 	
 	// return a list of speeds that can be used with reverse()
 	var getAvailableReverseSpeeds = function () {
 		return [ 2, 4, 8, 16, 32, 64 ];
-	}
+	};
 	
 	// return the current status as an array with two
 	// elements [PlayMode, Speed]
@@ -129,7 +129,7 @@ jCinema.platform.WDTV.VideoControlImpl = function () {
 			durationSeconds: jCinema.Utils.convertTimeCodeToSeconds(mediaInfo.MediaDuration),
 			fileName:        undefined,	// TODO
 			filePath:        undefined,	// TODO
-			title:           mediaInfo.title,
+			title:           mediaInfo.title
 		};
 	};
 	

@@ -48,7 +48,7 @@ jCinema.views.VideoBrowserController = function () {
 			numColumns = Math.floor(coversUl.outerWidth() / getCellSize().width);
 		}
 		return numColumns;
-	};
+	}
 	
 	function getNumRows() {
 		if (numRows === undefined) {
@@ -56,7 +56,7 @@ jCinema.views.VideoBrowserController = function () {
 			numRows = Math.floor($(window).height() / getCellSize().height);
 		}
 		return numRows;
-	};
+	}
 	
 	function populateCoverGrid(startIndex) {
 		// sanitize the start index
@@ -112,7 +112,8 @@ jCinema.views.VideoBrowserController = function () {
 					return function () {
 						var tmpImg = $('li[data-item-index="' + i + '"]>img', coversUl);
 						tmpImg.attr('src', $(this).attr('src')).addClass($(this).attr('className'));
-					}}(i));
+					};
+				}(i));
 			}
 		}
 		
@@ -120,7 +121,7 @@ jCinema.views.VideoBrowserController = function () {
 		coversUl.width(getNumColumns() * getCellSize().width);
 		
 		currentFirstItem = startIndex;
-	};
+	}
 	
 	function selectItemAt(index) {
 		if (index < 0) {
@@ -141,13 +142,13 @@ jCinema.views.VideoBrowserController = function () {
 		$('#title-tooltip').css({
 			left: li.position().left,
 			top:  li.position().top + li.outerHeight() - $('#title-tooltip').outerHeight(),
-			width: li.outerWidth(),
+			width: li.outerWidth()
 		});
-	};
+	}
 	
 	function getSelectedItemIndex() {
 		return parseInt($('img.selected', coversUl).parent().data('item-index'), 10);
-	};
+	}
 	
 	function getSelectedItemRowCol() {
 		var pos = $('img.selected', coversUl).position();
@@ -156,7 +157,7 @@ jCinema.views.VideoBrowserController = function () {
 			row: Math.floor(pos.top  / cellSize.height),
 			col: Math.floor(pos.left / cellSize.width)
 		};
-	};
+	}
 	
 	function getItem(index) {
 		return items[index];
@@ -227,7 +228,7 @@ jCinema.views.VideoBrowserController = function () {
 			// hide the wait indicator
 			jCinema.ViewStack.waitIndicator(false);
 		});
-	};
+	}
 	
 	function onNavigate(dCols, dRows) {
 		// must call getSelectedItemIndex() before we repopulate the grid
@@ -248,7 +249,7 @@ jCinema.views.VideoBrowserController = function () {
 		}
 		
 		selectItemAt(newIndex);
-	};
+	}
 	
 	// ViewStack installs a handler for this
 	var onKey = function (keyEvt) {
@@ -302,7 +303,7 @@ jCinema.views.VideoBrowserController = function () {
 			browsePath: undefined,
 			startIndex: 0,
 			selectedIndex: 0
-		}, data)
+		}, data);
 		
 		// get the available movies
 		jCinema.ViewStack.waitIndicator(true);
@@ -326,14 +327,14 @@ jCinema.views.VideoBrowserController = function () {
 		return {
 			browsePath:    currentBrowsePath,
 			startIndex:    currentFirstItem,
-			selectedIndex: getSelectedItemIndex(),
+			selectedIndex: getSelectedItemIndex()
 		};
 	};
 	
 	return {
 		begin: begin,
 		end:   end,
-		onKey: onKey,
+		onKey: onKey
 	};
 	
 }();

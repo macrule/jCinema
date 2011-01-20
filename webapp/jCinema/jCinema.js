@@ -63,7 +63,7 @@ jCinema.includeJS = function (file) {
 	xhr.send();
 	eval(xhr.responseText);
 	
-}
+};
 
 // this function dynamically loads the given css file
 jCinema.includeCSS = function (file, onComplete) {
@@ -84,7 +84,7 @@ jCinema.includeCSS = function (file, onComplete) {
 		$('head').append('<link type="text/css" rel="stylesheet" href="'+dynamicName+'" />');
 		setTimeout(onComplete, 250);
 	});
-}
+};
 
 // override the dummy interface functions with a specific implementation
 jCinema.initPlatform = function (name, opts) {

@@ -21,7 +21,7 @@ jCinema.UPnP = function () {
 	
 	var options = {
 		timeout: 500,
-		host:    'localhost:80',
+		host:    'localhost:80'
 	};
 	
 	
@@ -57,7 +57,7 @@ jCinema.UPnP = function () {
 				return true;
 			},
 			error: function (xhr, textStatus, errorThrown) {
-				jCinema.error('Failed jCinema.UPnP.executeCommand: ' + textStatus + ' ' + errorThrown)
+				jCinema.error('Failed jCinema.UPnP.executeCommand: ' + textStatus + ' ' + errorThrown);
 			}
 		};
 	};
@@ -80,7 +80,7 @@ jCinema.UPnP = function () {
 		request += '</s:Envelope>\r\n';
 		
 		return request;
-	}
+	};
 	
 	
 	// ---------------------------------------------------------------
@@ -132,7 +132,7 @@ jCinema.UPnP = function () {
 		};
 		
 		return dict;
-	}
+	};
 	
 	
 	// ---------------------------------------------------------------
@@ -140,7 +140,7 @@ jCinema.UPnP = function () {
 	return {
 		options: options,
 		executeCommand: executeCommand,
-		executePreparedCommand: executePreparedCommand,
+		executePreparedCommand: executePreparedCommand
 	};
 	
 }();

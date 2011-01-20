@@ -84,14 +84,14 @@ jCinema.IVideoControl = function () {
 		// unimplemented, override per platform
 		jCinema.notImplemented('jCinema.IVideoControl.getAvailableForwardSpeeds');
 		return [];
-	}
+	};
 	
 	// return a list of speeds that can be used with reverse()
 	var getAvailableReverseSpeeds = function () {
 		// unimplemented, override per platform
 		jCinema.notImplemented('jCinema.IVideoControl.getAvailableReverseSpeeds');
 		return [];
-	}
+	};
 	
 	// return the current status as an array with two
 	// elements [PlayMode, Speed]
@@ -118,7 +118,7 @@ jCinema.IVideoControl = function () {
 			durationSeconds: undefined,
 			fileName:        undefined,
 			filePath:        undefined,
-			title:           undefined,
+			title:           undefined
 		};
 	};
 	

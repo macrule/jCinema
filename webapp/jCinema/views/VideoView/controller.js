@@ -272,7 +272,7 @@ jCinema.views.VideoViewController = function () {
 	return {
 		begin: begin,
 		end:   end,
-		onKey: onKey,
+		onKey: onKey
 	};
 	
 }();

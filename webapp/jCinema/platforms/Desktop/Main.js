@@ -14,7 +14,7 @@
  */
 
 
-jCinema.platform.Desktop = {}
+jCinema.platform.Desktop = {};
 
 jCinema.platform.Desktop.init = function (opts) {
 	jCinema.UPnP.options.host = undefined;

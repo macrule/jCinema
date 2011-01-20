@@ -31,7 +31,7 @@ jCinema.IMediaDirectory = function () {
 			folderImagePathPattern:     jCinema.options.FolderImagePathPattern,
 			thumbnailImagePathPattern:  jCinema.options.ThumbnailImagePathPattern,
 			movieSheetImagePathPattern: jCinema.options.MovieSheetImagePathPattern,
-			patternSeparator:	    	jCinema.options.PatternSeparator,
+			patternSeparator:	    	jCinema.options.PatternSeparator
 		});
 	};
 	
@@ -39,7 +39,7 @@ jCinema.IMediaDirectory = function () {
 	return {
 		init: init,
 		
-		getMovieList: getMovieList,
+		getMovieList: getMovieList
 	};
 	
 }();

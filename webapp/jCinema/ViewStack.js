@@ -122,7 +122,7 @@ jCinema.ViewStack = function () {
 		pushView: pushView,
 		popView:  popView,
 		
-		waitIndicator: waitIndicator,
+		waitIndicator: waitIndicator
 	};
 	
 }();

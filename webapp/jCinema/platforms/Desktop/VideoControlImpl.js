@@ -79,12 +79,12 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 	// return a list of speeds that can be used with fastForward()
 	var getAvailableFastForwardSpeeds = function () {
 		return [ 2, 4, 8, 16, 32, 64 ];
-	}
+	};
 	
 	// return a list of speeds that can be used with reverse()
 	var getAvailableReverseSpeeds = function () {
 		return [ 2, 4, 8, 16, 32, 64 ];
-	}
+	};
 	
 	// return the current status as an array with two
 	// elements [PlayMode, Speed]
@@ -92,7 +92,7 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 		var speed = parseInt(videoElement.attr('playbackRate'), 10);
 		var mode = jCinema.IVideoControl.PlayMode.Stopped;
 		if (videoElement.attr('paused')) {
-			mode = jCinema.IVideoControl.PlayMode.Paused
+			mode = jCinema.IVideoControl.PlayMode.Paused;
 			speed = 0;
 		} else {
 			if (speed < 0) {
@@ -101,7 +101,7 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 			} else if (speed > 1) {
 				mode = jCinema.IVideoControl.PlayMode.FastForward;
 			} else {
-				mode = jCinema.IVideoControl.PlayMode.Playing
+				mode = jCinema.IVideoControl.PlayMode.Playing;
 			}
 		}
 		return [ mode, speed ];
@@ -120,7 +120,7 @@ jCinema.platform.Desktop.VideoControlImpl = function () {
 			durationSeconds: parseInt(videoElement.attr('duration'), 10),
 			fileName:        undefined,	// TODO
 			filePath:        undefined,	// TODO
-			title:           '',
+			title:           ''
 		};
 	};
 	

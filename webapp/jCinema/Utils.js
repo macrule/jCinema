@@ -16,7 +16,7 @@
 
 jCinema.Utils = function () {
 	
-	var timeCodeRegex = /^(\d\d)\:(\d\d)(?:\:(\d\d))?/i
+	var timeCodeRegex = /^(\d\d)\:(\d\d)(?:\:(\d\d))?/i;
 	
 	var convertTimeCodeToSeconds = function (timeCode) {
 		var match = timeCodeRegex.exec(timeCode);
@@ -76,7 +76,7 @@ jCinema.Utils = function () {
 			data: JSON.stringify({
 				version: '1.1',
 				method: method,
-				params: params || [],
+				params: params || []
 			}),
 			success: function (result) { if (success) success(result.result); },
 			error: error
