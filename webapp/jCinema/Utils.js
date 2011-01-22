@@ -128,6 +128,15 @@ jCinema.Utils = function () {
 	};
 	
 	
+	// JSON does not support comments, but we'd like to have them anyway, please
+	var jsLineCommentRegex = /^\s*\/\/.*$/gm;
+	var jsBlockCommentRegex = /\/\*(?:.|\n)*\*\//gm;
+	var removeJSONComments = function (json) {
+		json = json.replace(jsBlockCommentRegex, '');
+		json = json.replace(jsLineCommentRegex, '');
+		return json;
+	};
+	
 	return {
 		convertTimeCodeToSeconds: convertTimeCodeToSeconds,
 		convertSecondsToTimeCode: convertSecondsToTimeCode,
@@ -137,6 +146,8 @@ jCinema.Utils = function () {
 		includeJS: includeJS,
 		includeCSS: includeCSS,
 		reloadPageAndCss: reloadPageAndCss,
+		
+		removeJSONComments: removeJSONComments,
 	};
 	
 }();
