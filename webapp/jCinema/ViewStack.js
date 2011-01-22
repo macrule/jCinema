@@ -49,8 +49,8 @@ jCinema.ViewStack = function () {
 	// load a view's contoller and stylesheet
 	function prepareView(viewName, onComplete) {
 		var baseUrl = 'jCinema/views/' + viewName + '/';
-		jCinema.includeCSS(baseUrl + 'view.css', function () {
-			jCinema.includeJS(baseUrl + 'controller.js');
+		jCinema.Utils.includeCSS(baseUrl + 'view.css', function () {
+			jCinema.Utils.includeJS(baseUrl + 'controller.js');
 			onComplete();
 		});
 	};

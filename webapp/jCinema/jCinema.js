@@ -22,7 +22,7 @@ jCinema.views = {};
 
 // we use these lists to load all necessary javascript files
 jCinema.interfaceNames = [ 'VideoControl', 'KeyHandler', 'MediaDirectory' ];
-jCinema.otherClasses = [ 'MenuHandler', 'Utils', 'UPnP', 'ViewStack' ];
+jCinema.otherClasses = [ 'MenuHandler', 'UPnP', 'ViewStack' ];
 
 
 // logging
@@ -55,45 +55,29 @@ jCinema.notImplemented = function (n) {
 };
 
 
-// this function dynamically loads the given js file
-jCinema.includeJS = function (file) {
-	jCinema.debug('loading JS ' + file);
+
+// for bootstrapping we cannot use jCinema.Utils.includeJS because
+// it hasn't been loaded yet. So we have to duplicate the code to
+// dynamically use JavaScript files for at least Utils
+jCinema.includeJS = function (url) {
+	jCinema.debug('bootstrap loading JS ' + url);
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', file, false);
+	xhr.open('GET', url, false);
 	xhr.send();
 	eval(xhr.responseText);
-	
 };
+jCinema.includeJS('jCinema/Utils.js');
 
-// this function dynamically loads the given css file
-jCinema.includeCSS = function (file, onComplete) {
-	jCinema.debug('loading CSS ' + file);
-	// This is somewhat tricky:
-	// We need to call onComplete only when the CSS has been loaded. we could
-	// achieve that by loading the file and injecting it into "head". but then
-	// relative url()'s in the css will fail.
-	// by putting a <link> into "head" such url()'s work fine, but we never
-	// know when the CSS is loaded.
-	// So as a solution we now load the css, to make sure it's in the cache,
-	// and then add the <link> tag and call our completion handler after a short
-	// wait period.
-	// We choose a dynamic filename, to ensure browsers always reload modified
-	// CSS files during development.
-	var dynamicName = file+'?'+(new Date().valueOf());
-	$.get(dynamicName, function () {
-		$('head').append('<link type="text/css" rel="stylesheet" href="'+dynamicName+'" />');
-		setTimeout(onComplete, 250);
-	});
-};
+
 
 // override the dummy interface functions with a specific implementation
 jCinema.initPlatform = function (name, opts) {
 	// include the platform main file
-	jCinema.includeJS('jCinema/platforms/' + name + '/Main.js');
+	jCinema.Utils.includeJS('jCinema/platforms/' + name + '/Main.js');
 	
 	// first load the implementation files
 	for (var i = 0; i < jCinema.interfaceNames.length; i++) {
-		jCinema.includeJS('jCinema/platforms/' + name + '/' + jCinema.interfaceNames[i] + 'Impl.js');
+		jCinema.Utils.includeJS('jCinema/platforms/' + name + '/' + jCinema.interfaceNames[i] + 'Impl.js');
 	}
 	
 	var implementation = jCinema.platform[name];
@@ -120,13 +104,13 @@ jCinema.initPlatform = function (name, opts) {
 };
 
 // include all necessary js files
-jCinema.includeJS('jCinema/external/jquery-1.4.4.min.js');
-jCinema.includeJS('jCinema/external/jquery-ui-1.8.7.custom.min.js');
+jCinema.Utils.includeJS('jCinema/external/jquery-1.4.4.min.js');
+jCinema.Utils.includeJS('jCinema/external/jquery-ui-1.8.7.custom.min.js');
 for (var i = 0; i < jCinema.otherClasses.length; i++) {
-	jCinema.includeJS('jCinema/' + jCinema.otherClasses[i] + '.js');
+	jCinema.Utils.includeJS('jCinema/' + jCinema.otherClasses[i] + '.js');
 }
 for (var i = 0; i < jCinema.interfaceNames.length; i++) {
-	jCinema.includeJS('jCinema/interfaces/I' + jCinema.interfaceNames[i] + '.js');
+	jCinema.Utils.includeJS('jCinema/interfaces/I' + jCinema.interfaceNames[i] + '.js');
 }
 
 // unless overridden, the back button pops a view
@@ -140,10 +124,10 @@ jCinema.IKeyHandler.pushHandler(jCinema.Utils.reloadPageAndCss, jCinema.IKeyHand
 $(function() {
 	// load default options
 	jCinema.options = {};
-	jCinema.includeJS('jCinema/config.defaults.js');
+	jCinema.Utils.includeJS('jCinema/config.defaults.js');
 	
 	// allow overriding options in config
-	jCinema.includeJS('config.js');
+	jCinema.Utils.includeJS('config.js');
 	
 	$('#loading-screen').append('<h3>Platform: '+jCinema.options.Platform+'</h3>');
 	
