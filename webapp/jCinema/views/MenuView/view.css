@@ -1,0 +1,84 @@
+#MenuView {
+	background-color: #000;
+}
+
+#MenuView .menuheading {
+	width: 100%;
+	height: 60px;
+	margin: 0;
+	margin-bottom: 10px;
+	padding: 5px 20px;
+	color: #fff;
+	
+	border-bottom: solid 3px #fff;
+}
+
+#MenuView .menuheading img {
+	float: left;
+	margin-right: 10px;
+	max-height: 60px;
+	max-height: 60px;
+}
+
+#MenuView .menuheading h1 {
+	margin: 0;
+	padding: 0;
+	
+	font-size: 50px;
+	font-weight: bold;
+}
+
+#MenuView .menuarea {
+	clear: both;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#MenuView .menuiconcontainer {
+	float: left;
+	width: 40%;
+	text-align: center;
+}
+
+#MenuView .menuiconcontainer img {
+	max-height: 100%;
+	max-width: 100%;
+	vertical-align: middle;
+}
+
+#MenuView .menucontainer {
+	float: left;
+	width: 60%;
+	overflow: hidden;
+}
+
+#MenuView ul.menu {
+	position: relative;
+	padding: 10px;
+	margin: 0;
+	color: #eee;
+	font-size: 40px;
+	font-weight: bold;
+	list-style: none;
+}
+
+#MenuView ul.menu li {
+	padding: 3px 10px;
+	padding-bottom: 10px;
+	border: 2px solid transparent;
+}
+
+#MenuView ul.menu li.selected {
+	border: 2px solid rgba(0,0,0,0.7);
+	-webkit-box-shadow: 0 -1px 35px #B0C9FF; 
+	border-radius: 20px;
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255, 255, 255, 0.496094)), color-stop(0.5, rgba(255, 255, 255, 0.199219)), color-stop(0.5, rgba(0, 0, 0, 0.199219)), to(rgba(255, 255, 255, 0.0976562)));
+	color: #fff;
+	text-shadow: 0px 0px 8px #B0C9FF;
+}
+
+#MenuView ul.menu li span {
+	float: right;
+}
