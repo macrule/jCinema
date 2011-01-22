@@ -148,6 +148,17 @@ $(function() {
 	$('#loading-screen').append('<h3>Platform: '+jCinema.options.Platform+'</h3>');
 	
 	jCinema.initPlatform(jCinema.options.Platform, jCinema.options);
-	jCinema.ViewStack.pushView('VideoBrowser');
+	
+	// install a Menu, that for now only has two entries, of which
+	// only one works so far.
+	var mh = jCinema.MenuHandler;
+	var mainMenu = mh.createMenu('Main');
+	mh.appendMenuEntry(mainMenu, mh.createMenuEntry(
+		'Movies',
+		undefined,
+		function () { jCinema.ViewStack.pushView('VideoBrowser'); },
+		'jCinema/images/video-icon.png'));
+	mh.appendMenuEntry(mainMenu, mh.createMenuEntry('Settings'));
+	mh.showMenu(mainMenu);
 });
 
