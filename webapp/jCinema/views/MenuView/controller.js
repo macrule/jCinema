@@ -25,13 +25,13 @@ jCinema.views.MenuViewController = function() {
 		currentMenu = menu;
 		
 		// set menu title and icon
-		$('#menutitle').text(currentMenu.title);
+		$('#menutitle').text(currentMenu.title.localize());
 		$('#menutitleicon').attr('src', currentMenu.iconUrl);
 		
 		// set menu items
 		menuUl.empty();
 		for (var i = 0, len = currentMenu.items.length; i < len; i++) {
-			menuUl.append('<li>' + currentMenu.items[i].title +'<span>&gt;</span></li>');
+			menuUl.append('<li>' + currentMenu.items[i].title.localize() +'<span>&gt;</span></li>');
 		}
 	}
 	

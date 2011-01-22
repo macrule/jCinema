@@ -140,13 +140,13 @@ $(function() {
 	// install a Menu, that for now only has two entries, of which
 	// only one works so far.
 	var mh = jCinema.MenuHandler;
-	var mainMenu = mh.createMenu('Main');
+	var mainMenu = mh.createMenu(jCinema.STR('Home'));
 	mh.appendMenuEntry(mainMenu, mh.createMenuEntry(
-		'Movies',
+		jCinema.STR('Movies'),
 		undefined,
 		function () { jCinema.ViewStack.pushView('VideoBrowser'); },
 		'jCinema/images/video-icon.png'));
-	mh.appendMenuEntry(mainMenu, mh.createMenuEntry('Settings'));
+	mh.appendMenuEntry(mainMenu, mh.createMenuEntry(jCinema.STR('Settings')));
 	mh.showMenu(mainMenu);
 });
 
