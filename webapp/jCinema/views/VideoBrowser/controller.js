@@ -59,6 +59,20 @@ jCinema.views.VideoBrowserController = function () {
 	}
 	
 	function populateCoverGrid(startIndex) {
+		// handle the case of "no items" first
+		if (items.length == 0) {
+			numRows = numColumns = currentFirstItem = undefined;
+			coversUl.empty();
+			
+			// (ab)use the tooltip to tell user about no images being available
+			$('#title-tooltip > h3').text(jCinema.STR('No movies available').localize());
+			$('#title-tooltip').css({
+				left: ($('#VideoBrowser').outerWidth() - $('#title-tooltip').outerWidth())/2,
+				top:  ($('#VideoBrowser').outerHeight() - $('#title-tooltip').outerHeight())/2,
+			});
+			return;
+		}
+		
 		// sanitize the start index
 		var totalNumRows = Math.ceil(items.length / getNumColumns());
 		var maxStartIndex = (totalNumRows - getNumRows()) * getNumColumns();
@@ -127,6 +141,9 @@ jCinema.views.VideoBrowserController = function () {
 		if (index < 0) {
 			index = 0;
 		} else if (index >= items.length) {
+			if (items.length == 0) {
+				return;
+			}
 			index = items.length - 1;
 		}
 		$('img.selected', coversUl).removeClass('selected');
