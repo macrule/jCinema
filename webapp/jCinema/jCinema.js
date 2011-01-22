@@ -22,7 +22,7 @@ jCinema.views = {};
 
 // we use these lists to load all necessary javascript files
 jCinema.interfaceNames = [ 'VideoControl', 'KeyHandler', 'MediaDirectory' ];
-jCinema.otherClasses = [ 'MenuHandler', 'UPnP', 'ViewStack' ];
+jCinema.otherClasses = [ 'Localization', 'MenuHandler', 'UPnP', 'ViewStack' ];
 
 
 // logging
@@ -132,6 +132,10 @@ $(function() {
 	$('#loading-screen').append('<h3>Platform: '+jCinema.options.Platform+'</h3>');
 	
 	jCinema.initPlatform(jCinema.options.Platform, jCinema.options);
+	
+	// load core localizations
+	jCinema.Localization.setLocale(jCinema.options.Locale);
+	jCinema.Localization.loadDictionary('jCinema/locale');
 	
 	// install a Menu, that for now only has two entries, of which
 	// only one works so far.

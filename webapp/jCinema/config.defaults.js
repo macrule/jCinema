@@ -1,4 +1,7 @@
 $.extend(jCinema.options, {
+	// The default locale used by the UI
+	Locale: 'en',
+	
 	// Currently allowed values are WDTV and Desktop.
 	Platform:		(navigator.userAgent.indexOf('QtEmbedded') != -1) ? 'WDTV' : 'Desktop',
 	

@@ -51,6 +51,10 @@ jCinema.ViewStack = function () {
 		var baseUrl = 'jCinema/views/' + viewName + '/';
 		jCinema.Utils.includeCSS(baseUrl + 'view.css', function () {
 			jCinema.Utils.includeJS(baseUrl + 'controller.js');
+			
+			// load the localization dict as well
+			jCinema.Localization.loadDictionary(baseUrl + 'locale');
+			
 			onComplete();
 		});
 	};
