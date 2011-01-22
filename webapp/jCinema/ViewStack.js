@@ -50,12 +50,15 @@ jCinema.ViewStack = function () {
 	function prepareView(viewName, onComplete) {
 		var baseUrl = 'jCinema/views/' + viewName + '/';
 		jCinema.Utils.includeCSS(baseUrl + 'view.css', function () {
-			jCinema.Utils.includeJS(baseUrl + 'controller.js');
-			
-			// load the localization dict as well
-			jCinema.Localization.loadDictionary(baseUrl + 'locale');
-			
-			onComplete();
+			// try to load a custom css from the styles directory
+			jCinema.Utils.includeCSS('jCinema/styles/' + jCinema.options.Style + '/' + viewName + '.css', function () {
+				jCinema.Utils.includeJS(baseUrl + 'controller.js');
+				
+				// load the localization dict as well
+				jCinema.Localization.loadDictionary(baseUrl + 'locale');
+				
+				onComplete();
+			});
 		});
 	};
 	

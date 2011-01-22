@@ -96,9 +96,9 @@ jCinema.views.VideoBrowserController = function () {
 			var item = getItem(i);
 			var img = $('li[data-item-index="' + i + '"]>img', coversUl);
 			if (item.type == 'folder') {
-				img.attr('src', 'jCinema/images/folder-icon.png');
+				img.attr('src', jCinema.Utils.getStyledImageUrl('folder-icon.png'));
 			} else if (item.type == 'file') {
-				img.attr('src', 'jCinema/images/video-icon.png');
+				img.attr('src', jCinema.Utils.getStyledImageUrl('video-icon.png'));
 			}
 			
 			// and exchange it with the real one as as soon as it's loaded.

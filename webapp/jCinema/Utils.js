@@ -113,9 +113,13 @@ jCinema.Utils = function () {
 		// We choose a dynamic filename, to ensure browsers always reload modified
 		// CSS files during development.
 		var dynamicName = file+'?'+(new Date().valueOf());
-		$.get(dynamicName, function () {
-			$('head').append('<link type="text/css" rel="stylesheet" href="'+dynamicName+'" />');
-			setTimeout(onComplete, 250);
+		$.get(dynamicName, function (data, textStatus, XMLHttpRequest) {
+			if (data.length > 0) {
+				$('head').append('<link type="text/css" rel="stylesheet" href="' + dynamicName + '" />');
+				setTimeout(onComplete, 250);
+			} else {
+				onComplete();
+			}
 		});
 	};
 	
@@ -127,6 +131,9 @@ jCinema.Utils = function () {
 		location.reload(true);
 	};
 	
+	var getStyledImageUrl = function (imageName) {
+		return 'jCinema/styles/' + jCinema.options.Style + '/images/' + imageName;
+	};
 	
 	// JSON does not support comments, but we'd like to have them anyway, please
 	var jsLineCommentRegex = /^\s*\/\/.*$/gm;
@@ -146,6 +153,7 @@ jCinema.Utils = function () {
 		includeJS: includeJS,
 		includeCSS: includeCSS,
 		reloadPageAndCss: reloadPageAndCss,
+		getStyledImageUrl: getStyledImageUrl,
 		
 		removeJSONComments: removeJSONComments,
 	};

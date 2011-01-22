@@ -133,6 +133,9 @@ $(function() {
 	
 	jCinema.initPlatform(jCinema.options.Platform, jCinema.options);
 	
+	// if a different style from default is selected, load its base.css now
+	jCinema.Utils.includeCSS('jCinema/styles/' + jCinema.options.Style + '/base.css');
+	
 	// load core localizations
 	jCinema.Localization.setLocale(jCinema.options.Locale);
 	jCinema.Localization.loadDictionary('jCinema/locale');
@@ -145,7 +148,7 @@ $(function() {
 		jCinema.STR('Movies'),
 		undefined,
 		function () { jCinema.ViewStack.pushView('VideoBrowser'); },
-		'jCinema/images/video-icon.png'));
+		jCinema.Utils.getStyledImageUrl('video-icon.png')));
 	mh.appendMenuEntry(mainMenu, mh.createMenuEntry(jCinema.STR('Settings')));
 	mh.showMenu(mainMenu);
 });
