@@ -31,14 +31,7 @@
 
 jCinema.MenuHandler = function () {
 	
-	var showMenu = function (menu) {
-		// show the menu view for the next menu
-		jCinema.ViewStack.pushView('MenuView', {
-			menu: menu
-		});
-	};
-	
-	var createMenu = function (title, items, iconUrl) {
+	var Menu = function (title, items, iconUrl) {
 		if (items === undefined) {
 			items = [];
 		}
@@ -51,7 +44,7 @@ jCinema.MenuHandler = function () {
 		return menu;
 	};
 	
-	var createMenuEntry = function (title, nextMenu, onAction, iconUrl) {
+	var MenuEntry = function (title, nextMenu, onAction, iconUrl) {
 		var entry = {
 			title:      title,
 			parentMenu: undefined,
@@ -61,6 +54,13 @@ jCinema.MenuHandler = function () {
 		};
 		
 		return entry;
+	};
+	
+	var showMenu = function (menu) {
+		// show the menu view for the next menu
+		jCinema.ViewStack.pushView('MenuView', {
+			menu: menu
+		});
 	};
 	
 	var appendMenuEntry = function (parentMenu, entry) {
@@ -91,9 +91,9 @@ jCinema.MenuHandler = function () {
 	};
 	
 	return {
+		Menu: Menu,
+		MenuEntry: MenuEntry,
 		showMenu: showMenu,
-		createMenu: createMenu,
-		createMenuEntry: createMenuEntry,
 		appendMenuEntry: appendMenuEntry,
 		activateMenuEntry: activateMenuEntry
 	};
