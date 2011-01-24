@@ -14,10 +14,58 @@
  */
 
 
+/**
+ * @class
+ * 
+ * The ViewStack is the core of the jCinema view layer. All views are organized
+ * in a stack onto which new views can be pushed, and later popped. This way it's
+ * easy to get a flow through multiple UI screens as is necessary for remote
+ * controlled devices.
+ * 
+ * When a view becomes top of the stack, it receives a begin() message. This can
+ * be the result of being pushed, as well as all other views above it having been
+ * popped. The begin message can include a data object that is private to the view.
+ * 
+ * When a view loses the top spot on the stack (and thus the screen), it receives an
+ * end() message. The view can return a data object as result of that message. When
+ * the view later again becomes visible that same data object will be passed as part
+ * of its begin() message.
+ * 
+ * Using such data objects views can easily retain (or at least restore) their internal
+ * state. But be warned that that data should not be excessive, as we are running
+ * in embedded systems and often have to trade space for time.
+ * 
+ * The ViewStack also installs a key handler for the currently active view, and uninstalls
+ * it when no longer needed. A view that has a onKey(keyEvt) method will automatically
+ * receive key events.
+ */
 jCinema.ViewStack = function () {
 	
+	/**
+	 * The actual stack on which views and their state are stored. Each
+	 * item on the stack is an object with these properties:
+	 * 
+	 * <ul>
+	 * <li>data: the data object passed in begin() and end() messages</li>
+	 * <li>viewName: the name of the type of view</li>
+	 * </ul>
+	 * 
+	 * @private
+	 */
 	var stack = [];
 	
+	/**
+	 * Helper function to make a view begin its work after it's been pushed onto
+	 * the stack or after all views above it have been popped.
+	 * 
+	 * It installs a key handler for the view (or a dummy one, so we can unconditionally
+	 * remove it later), and as final step it sends the begin() message to the view along
+	 * with the data object as parameter.
+	 * 
+	 * @private
+	 * @param {String} viewName The name of the view. This is used to find the controller class.
+	 * @param {Object} data Private data object. Only the respective view knows what's inside.
+	 */
 	function beginView(viewName, data) {
 		// push a key handler for the view
 		var controller = jCinema.views[viewName + 'Controller'];
@@ -30,8 +78,21 @@ jCinema.ViewStack = function () {
 		
 		// and let it begin its work
 		controller.begin(data);
-	};
+	}
 	
+	/**
+	 * Helper function to make the current top view end its work because it's
+	 * being popped from the stack, or a new view is pushed on top of it.
+	 * 
+	 * It removes the key handler that beginView() has installed, and stores the
+	 * result of the view's end() message on the view's stack entry. It will be
+	 * passed to it in begin() when it's becoming active again next time.
+	 * 
+	 * This function also guards against the last view being popped, as this must
+	 * never happen.
+	 * 
+	 * @private
+	 */
 	function endCurrentView() {
 		// end the current view first
 		if (stack.length > 0) {
@@ -44,9 +105,17 @@ jCinema.ViewStack = function () {
 			var current = stack[stack.length - 1];
 			current.data = jCinema.views[current.viewName + 'Controller'].end();
 		}
-	};
+	}
 	
-	// load a view's contoller and stylesheet
+	/**
+	 * Prepares a view of a certain type for display. This includes loading its contoller
+	 * class, stylesheet, and localization.
+	 * 
+	 * @private
+	 * @param {String} viewName The name of the view to prepare.
+	 * @param {Function} onComplete Called when preparation is finished, and the view can be used.
+	 */
+	// 
 	function prepareView(viewName, onComplete) {
 		var baseUrl = 'jCinema/views/' + viewName + '/';
 		jCinema.Utils.includeCSS(baseUrl + 'view.css', function () {
@@ -60,16 +129,33 @@ jCinema.ViewStack = function () {
 				onComplete();
 			});
 		});
-	};
+	}
 	
 	
+	/**
+	 * Puts a view actually on the screen.
+	 * 
+	 * @private
+	 * @param {String} viewName The name of the view.
+	 * @param {Object} data The data object to pass to the view's begin() method.
+	 */
 	function showView(viewName, data) {
 		$('#view-container').load('jCinema/views/' + viewName + '/view.html', function () {
 			// run the new view
 			beginView(viewName, data);
 		});
-	};
+	}
 	
+	/**
+	 * Pushes a new view onto the stack, thus making it the currently displayed
+	 * view. The state of the previously current view is retained, and restored
+	 * as soon as this view is popped from the stack.
+	 * 
+	 * @memberOf jCinema.ViewStack
+	 * @param {String} viewName The name of the view to push.
+	 * @param {Object} [data] An object containing data to configure the view. This is
+	 * passed directly to the view controller's begin() method.
+	 */
 	var pushView = function (viewName, data) {
 		jCinema.log('Pushing view ' + viewName);
 		
@@ -98,6 +184,16 @@ jCinema.ViewStack = function () {
 		}
 	};
 	
+	/**
+	 * Pops the currently top view from the stack. Its state is lost
+	 * and the previous view is restored to its previous state. By
+	 * default this method is directly linked to the "Back" key event.
+	 * 
+	 * Should the view have forgotten to remove the wait indicator
+	 * from the screen, it will be done now as well.
+	 * 
+	 * @memberOf jCinema.ViewStack
+	 */
 	var popView = function () {
 		// never pop the first view
 		if (stack.length <= 1) {
@@ -117,6 +213,16 @@ jCinema.ViewStack = function () {
 		waitIndicator(false);
 	};
 	
+	/**
+	 * Shows or hides the wait indicator. This is a globally available
+	 * UI element indicating to the user that some action can take a
+	 * while, but everything is alright. The wait indicator is visually
+	 * on top of all other UI elements.
+	 * 
+	 * @memberOf jCinema.ViewStack
+	 * @param {Boolean} [show=true] Controls if the wait indicator is to be
+	 * shown or hidden.
+	 */
 	var waitIndicator = function (show) {
 		if (show === true || show === undefined) {
 			$('#waiting-view').show();
