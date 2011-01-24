@@ -14,9 +14,26 @@
  */
 
 
-// Gloabl Namespace for this project
+/**
+ * Global namespace for the jCinema project.
+ * @namespace
+ */
 var jCinema = {};
+
+/**
+ * Each platform creates a namespace below jCinema.platform for its
+ * implementations.
+ * @namespace
+ */
 jCinema.platform = {};
+
+/**
+ * All view classes need to be located in the jCinema.views namespace,
+ * because that is expected for automatic loading by their name.
+ * @namespace
+ * 
+ * @see jCinema.ViewStack
+ */
 jCinema.views = {};
 
 
@@ -25,23 +42,29 @@ jCinema.interfaceNames = [ 'VideoControl', 'KeyHandler', 'MediaDirectory' ];
 jCinema.otherClasses = [ 'Localization', 'MenuHandler', 'UPnP', 'ViewStack' ];
 
 
-// logging
+/**
+ * Wrapper for console.log, so we can turn off debugging messages easily. 
+ */
 jCinema.log = function () {
 	// just pass on arguments
 	console.log.apply(console, arguments);
 };
+/** @see jCinema.log */
 jCinema.debug = function () {
 	// just pass on arguments
 	console.debug.apply(console, arguments);
 };
+/** @see jCinema.log */
 jCinema.info = function () {
 	// just pass on arguments
 	console.info.apply(console, arguments);
 };
+/** @see jCinema.log */
 jCinema.warn = function () {
 	// just pass on arguments
 	console.warn.apply(console, arguments);
 };
+/** @see jCinema.log */
 jCinema.error = function () {
 	// just pass on arguments
 	console.error.apply(console, arguments);
@@ -49,16 +72,28 @@ jCinema.error = function () {
 
 
 
-// for unimplemented interfaces
+/**
+ * Used to declare pure abstract methods that need to be overridden in actual
+ * implementations of an interface.
+ * 
+ * @param {String} n Name of the unimplemented method, should be fully qualified.
+ * @throws {String} An exception like 'Not implemented IVideoControl.method'
+ */
 jCinema.notImplemented = function (n) {
 	throw 'Not implemented '+n;
 };
 
 
 
-// for bootstrapping we cannot use jCinema.Utils.includeJS because
-// it hasn't been loaded yet. So we have to duplicate the code to
-// dynamically use JavaScript files for at least Utils
+/**
+ * For bootstrapping we cannot use jCinema.Utils.includeJS because it hasn't
+ * been loaded yet. So we have to duplicate the code to dynamically use
+ * JavaScript files for at least Utils.
+ * 
+ * @param {String} url URL to the *.js file.
+ * @deprecated do not use, anywhere but in jCinema.js
+ * @see jCinema.Utils.includeJS
+ */ 
 jCinema.includeJS = function (url) {
 	jCinema.debug('bootstrap loading JS ' + url);
 	var xhr = new XMLHttpRequest();
@@ -70,7 +105,14 @@ jCinema.includeJS('jCinema/Utils.js');
 
 
 
-// override the dummy interface functions with a specific implementation
+/**
+ * Override the dummy interface functions with a specific implementation.
+ * 
+ * @private
+ * @param {String} name Name of the platform to use.
+ * @param {Object} opts Options to pass on to interface init() methods.
+ * Normally you want to use jCinema.options here.
+ */
 jCinema.initPlatform = function (name, opts) {
 	// include the platform main file
 	jCinema.Utils.includeJS('jCinema/platforms/' + name + '/Main.js');
