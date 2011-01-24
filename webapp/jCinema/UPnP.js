@@ -14,6 +14,16 @@
  */
 
 
+/**
+ * @class
+ * 
+ * A class that can execute UPnP commands. Currently this is implemented using
+ * ajax, but if that causes problems it could be re-written to be passed through
+ * to the backend.
+ * 
+ * Currently this class and its functions are not very generic and tailored
+ * extremely for use with the WDTV's built-in UPnP server.
+ */
 jCinema.UPnP = function () {
 	
 	// ---------------------------------------------------------------
@@ -28,10 +38,31 @@ jCinema.UPnP = function () {
 	// ---------------------------------------------------------------
 	// Command execution
 	
+	/**
+	 * Execute a UPnP command. This builds the command body each time
+	 * when called. If you have commands that don't change their arguments
+	 * but have to be executed very often, you should use prepareCommand()
+	 * and executePreparedCommand() instead.
+	 * 
+	 * @memberOf jCinema.UPnP
+	 * @param {String} service
+	 * @param {String} action
+	 * @param {Object} args
+	 * @returns {Object|null} Returns a dictionary with results or null in case of error.
+	 */
 	var executeCommand = function (service, action, args) {
 		return executePreparedCommand(prepareCommand(service, action, args));
 	};
 	
+	/**
+	 * Executes a prepared UPnP command. This helps improve performance
+	 * because a lot of string concatenations can be saved with a prepared
+	 * command.
+	 * 
+	 * @memberOf jCinema.UPnP
+	 * @param {Object} cmd A prepared command as returned by jCinema.UPnP.prepareCommand()
+	 * @returns {Object|null} Returns a dictionary with results or null in case of error.
+	 */
 	var executePreparedCommand = function (cmd) {
 		// make the SOAP call
 		var result = $.ajax(cmd);
@@ -43,6 +74,15 @@ jCinema.UPnP = function () {
 		}
 	};
 	
+	/**
+	 * Prepares a command with the given parameters for execution.
+	 * 
+	 * @memberOf jCinema.UPnP
+	 * @param {String} service
+	 * @param {String} action
+	 * @param {Object} args
+	 * @returns {Object} A prepared command that can be used with jCinema.UPnP.executePreparedCommand()
+	 */
 	var prepareCommand = function (service, action, args) {
 		return {
 			async:       false,
@@ -62,6 +102,17 @@ jCinema.UPnP = function () {
 		};
 	};
 	
+	/**
+	 * Constructs the SOAP request body that makes up most of the actual
+	 * UPnP request. This is far from standard, and only used to work
+	 * with the WDTV so far.
+	 * 
+	 * @private
+	 * @param {String} service
+	 * @param {String} action
+	 * @param {Object} args
+	 * @returns {String} The SOAP request body for the UPnP command.
+	 */
 	var buildSoapRequestBody = function (service, action, args) {
 		var request = '';
 		
@@ -86,6 +137,14 @@ jCinema.UPnP = function () {
 	// ---------------------------------------------------------------
 	// Result parsing
 	
+	/**
+	 * Parses the UPnP SOAP result, and builds a JavaScript object from
+	 * it.
+	 *  
+	 * @private
+	 * @param {String} xml The SOAP result.
+	 * @returns {Object}
+	 */
 	var parseCommandResult = function (xml) {
 		var dict = {};
 		
@@ -105,6 +164,14 @@ jCinema.UPnP = function () {
 		return dict;
 	};
 	
+	/**
+	 * The WDTV has certain nodes whose names end in "MetaData". These are
+	 * parsed especially using this method.
+	 * 
+	 * @private
+	 * @param {Object} mediaInfoMetaData
+	 * @returns {Object}
+	 */
 	var parseMetaData = function (mediaInfoMetaData) {
 		// TODO: incomplete
 		if (mediaInfoMetaData == null) return null;
@@ -119,7 +186,6 @@ jCinema.UPnP = function () {
 		
 		var nodes = item.childNodes;
 		
-		var dict = {};
 		var title = item.getElementsByTagName('title')[0].firstChild.nodeValue;
 		var resNode = item.getElementsByTagName('res')[0];
 		var res = resNode.getAttribute('resolution');
