@@ -39,7 +39,7 @@ jCinema.views = {};
 
 // we use these lists to load all necessary javascript files
 jCinema.interfaceNames = [ 'VideoControl', 'KeyHandler', 'MediaDirectory' ];
-jCinema.otherClasses = [ 'Localization', 'MenuHandler', 'UPnP', 'ViewStack' ];
+jCinema.otherClasses = [ 'BackEndProxy', 'Localization', 'MenuHandler', 'UPnP', 'ViewStack' ];
 
 
 /**

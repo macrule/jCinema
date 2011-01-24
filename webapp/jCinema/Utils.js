@@ -87,46 +87,6 @@ jCinema.Utils = function () {
 	};
 	
 	/**
-	 * Use this to communicate with the JSON-RPC backend server, that is part
-	 * of jCinema. This automatically takes care of calling the correct platform-specific
-	 * RPC module.
-	 * 
-	 * @memberOf jCinema.Utils
-	 * @param {String} method Name of the RPC method to call.
-	 * @param {Array|Object} params Positional or named parameters passed to the RPC method.
-	 * @param {Function} [success] Handler executed if the call succeeds.
-	 * @param {Function} [error] Handler executed if the call fails.
-	 * @returns {Object} Result that the specific RPC you called generated.
-	 */
-	var callBackEnd = function (method, params, success, error) {
-		var opts = {
-			async: false,
-			url: 'http://' + jCinema.options.BackEndHost + '/jCinemaRPC/' + jCinema.options.Platform,
-			type: 'POST',
-			cache: false,
-			processData: false,
-			dataType: 'json',
-			data: JSON.stringify({
-				version: '1.1',
-				method: method,
-				params: params || []
-			}),
-			success: function (result) { if (success) success(result.result); },
-			error: error
-		};
-		
-		var result = $.ajax(opts);
-		if (result) {
-			var json = $.parseJSON(result.responseText);
-			if (json && json.result) {
-				return json.result;
-			}
-		}
-		
-		return null;
-	};
-	
-	/**
 	 * Loads the content at the passed in Url synchronously
 	 * and returns it as a string.
 	 * 
@@ -238,7 +198,6 @@ jCinema.Utils = function () {
 	return {
 		convertTimeCodeToSeconds: convertTimeCodeToSeconds,
 		convertSecondsToTimeCode: convertSecondsToTimeCode,
-		callBackEnd: callBackEnd,
 		
 		loadUrl: loadUrl,
 		includeJS: includeJS,

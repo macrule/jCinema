@@ -26,13 +26,7 @@ jCinema.IMediaDirectory = function () {
 		if (path == null || path == '') {
 			path = jCinema.options.MediaSearchPath;
 		}
-		return jCinema.Utils.callBackEnd('listMovies', {
-			searchPath: path,
-			folderImagePathPattern:     jCinema.options.FolderImagePathPattern,
-			thumbnailImagePathPattern:  jCinema.options.ThumbnailImagePathPattern,
-			movieSheetImagePathPattern: jCinema.options.MovieSheetImagePathPattern,
-			patternSeparator:	    	jCinema.options.PatternSeparator
-		});
+		return jCinema.BackEndProxy.listMovies(path);
 	};
 	
 	
