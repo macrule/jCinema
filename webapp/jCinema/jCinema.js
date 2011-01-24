@@ -123,7 +123,6 @@ jCinema.IKeyHandler.pushHandler(jCinema.Utils.reloadPageAndCss, jCinema.IKeyHand
 // this launches everything when the main html has loaded
 $(function() {
 	// load default options
-	jCinema.options = {};
 	jCinema.Utils.includeJS('jCinema/config.defaults.js');
 	
 	// allow overriding options in config
