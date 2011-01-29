@@ -110,7 +110,7 @@ jCinema.views.MenuViewController = function() {
 	function activateSelectedItem() {
 		var index = getSelectedItemIndex();
 		if (index >= 0 && index < currentMenu.items.length) {
-			jCinema.MenuHandler.activateMenuEntry(currentMenu.items[index]);
+			currentMenu.items[index].activate();
 		}
 	}
 	
