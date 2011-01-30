@@ -39,7 +39,8 @@ jCinema.views = {};
 
 // we use these lists to load all necessary javascript files
 jCinema.interfaceNames = [ 'VideoControl', 'KeyHandler', 'MediaDirectory' ];
-jCinema.otherClasses = [ 'BackEndProxy', 'Localization', 'MenuHandler', 'UPnP', 'ViewStack' ];
+jCinema.otherClasses = [ 'BackEndProxy', 'Localization', 'MenuHandler', 'ModuleManager', 'UPnP', 'ViewStack' ];
+jCinema.moduleNames = [];
 
 
 /**
@@ -154,6 +155,9 @@ for (var i = 0; i < jCinema.otherClasses.length; i++) {
 for (var i = 0; i < jCinema.interfaceNames.length; i++) {
 	jCinema.Utils.includeJS('jCinema/interfaces/I' + jCinema.interfaceNames[i] + '.js');
 }
+for (var i = 0; i < jCinema.moduleNames.length; i++) {
+	jCinema.Utils.includeJS('jCinema/modules/' + jCinema.moduleNames[i] + '/' + jCinema.moduleNames[i] + '.js');
+}
 
 // unless overridden, the back button pops a view
 jCinema.IKeyHandler.pushHandler(jCinema.ViewStack.popView, jCinema.IKeyHandler.KeyEvent.Back);
@@ -180,6 +184,9 @@ $(function() {
 	// load core localizations
 	jCinema.Localization.setLocale(jCinema.options.Locale);
 	jCinema.Localization.loadDictionary('jCinema/locale');
+	
+	// load all registered modules
+	jCinema.ModuleManager.loadModules();
 	
 	// install a Menu, that for now only has two entries, of which
 	// only one works so far.
