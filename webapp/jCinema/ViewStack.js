@@ -65,7 +65,21 @@ jCinema.ViewStack = function () {
 	 * @param {String} viewName The name of the view for which to return names and urls.
 	 */
 	var ViewNamingStrategy = function (viewName) {
-		var viewBaseUrl = 'jCinema/views/' + viewName;
+		var viewBaseUrl;
+		var moduleName;
+		var parts = viewName.split('.');
+		if (parts.length == 1) {
+			// this is a core view, stored directly in jCinema/views
+			viewBaseUrl = 'jCinema/views/' + viewName;
+		} else if (parts.length == 2) {
+			// this is a module view, stored in a module directory
+			moduleName = parts[0];
+			viewName = parts[1];
+			viewBaseUrl = 'jCinema/modules/' + moduleName + '/views/' + parts[1];
+		} else {
+			throw 'Illegal view name ' + viewName + ': Use format "ViewName" or "ModuleName.ViewName"';
+		}
+		
 		return {
 			getControllerClass: function () {
 				return jCinema.views[viewName + 'Controller'];
@@ -149,7 +163,6 @@ jCinema.ViewStack = function () {
 	 * @param {String} viewName The name of the view to prepare.
 	 * @param {Function} onComplete Called when preparation is finished, and the view can be used.
 	 */
-	// 
 	function prepareView(viewName, onComplete) {
 		var vns = ViewNamingStrategy(viewName);
 		jCinema.Utils.includeCSS(vns.getViewCSSUrl(), function () {
