@@ -124,12 +124,18 @@ jCinema.MenuEntry.prototype.activate = function() {
 jCinema.MenuHandler = function () {
 	
 	/**
+	 * The main menu instance, to which all other menus are attached.
+	 * @private
+	 */
+	var mainMenu = new jCinema.Menu(jCinema.STR('Home'));
+	
+	/**
 	 * Show a menu on screen. This should normally only be used
 	 * to show the main menu as first action. After that new menus
 	 * are automatically handled by <code>jCinema.MenuEntry.activate()</code>.
 	 * 
 	 * @memberOf jCinema.MenuHandler
-	 * @param {jCinema.MenuHandler.Menu} menu The menu to show on screen.
+	 * @param {jCinema.Menu} menu The menu to show on screen.
 	 */
 	var showMenu = function (menu) {
 		// show the menu view for the next menu
@@ -138,7 +144,18 @@ jCinema.MenuHandler = function () {
 		});
 	};
 	
+	/**
+	 * Returns the jCinema main menu.
+	 * 
+	 * @memberOf jCinema.MenuHandler
+	 * @returns {jCinema.Menu} The main menu instance.
+	 */
+	var getMainMenu = function () {
+		return mainMenu;
+	};
+	
 	return {
+		getMainMenu: getMainMenu,
 		showMenu: showMenu
 	};
 	

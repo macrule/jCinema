@@ -183,7 +183,7 @@ $(function() {
 	
 	// install a Menu, that for now only has two entries, of which
 	// only one works so far.
-	var mainMenu = new jCinema.Menu(jCinema.STR('Home'));
+	var mainMenu = jCinema.MenuHandler.getMainMenu();
 	mainMenu.append(new jCinema.MenuEntry(
 		jCinema.STR('Movies'),
 		undefined,
