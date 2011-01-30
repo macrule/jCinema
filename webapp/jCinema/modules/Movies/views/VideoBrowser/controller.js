@@ -183,7 +183,7 @@ jCinema.views.VideoBrowserController = function () {
 	function activateItemAt(index) {
 		var item = getItem(index);
 		if (item.type == 'folder') {
-			jCinema.ViewStack.pushView('VideoBrowser', { browsePath: item.url });
+			jCinema.ViewStack.pushView('Movies.VideoBrowser', { browsePath: item.url });
 		} else if (item.type == 'file') {
 			showMovieSheet(item);
 		}

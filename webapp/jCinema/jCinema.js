@@ -40,7 +40,7 @@ jCinema.views = {};
 // we use these lists to load all necessary javascript files
 jCinema.interfaceNames = [ 'VideoControl', 'KeyHandler', 'MediaDirectory' ];
 jCinema.otherClasses = [ 'BackEndProxy', 'Localization', 'MenuHandler', 'ModuleManager', 'UPnP', 'ViewStack' ];
-jCinema.moduleNames = [];
+jCinema.moduleNames = ['Movies'];
 
 
 /**
@@ -191,11 +191,6 @@ $(function() {
 	// install a Menu, that for now only has two entries, of which
 	// only one works so far.
 	var mainMenu = jCinema.MenuHandler.getMainMenu();
-	mainMenu.append(new jCinema.MenuEntry(
-		jCinema.STR('Movies'),
-		undefined,
-		function () { jCinema.ViewStack.pushView('VideoBrowser'); },
-		jCinema.Utils.getStyledImageUrl('video-icon.png')));
 	mainMenu.append(new jCinema.MenuEntry(jCinema.STR('Settings')));
 	jCinema.MenuHandler.showMenu(mainMenu);
 });
