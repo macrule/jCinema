@@ -55,6 +55,40 @@ jCinema.ViewStack = function () {
 	var stack = [];
 	
 	/**
+	 * ViewNamingStrategy is a helper class that returns Urls to required
+	 * view resources, based on a specific naming strategy. This way the
+	 * actual layout of files on disk is better decoupled from the rest
+	 * of this class.
+	 * @constructor
+	 * 
+	 * @private
+	 * @param {String} viewName The name of the view for which to return names and urls.
+	 */
+	var ViewNamingStrategy = function (viewName) {
+		var viewBaseUrl = 'jCinema/views/' + viewName;
+		return {
+			getControllerClass: function () {
+				return jCinema.views[viewName + 'Controller'];
+			},
+			getViewJSUrl: function () {
+				return viewBaseUrl + '/controller.js';
+			},
+			getViewHtmlUrl: function () {
+				return viewBaseUrl + '/view.html';
+			},
+			getViewCSSUrl: function () {
+				return viewBaseUrl + '/view.css';
+			},
+			getViewStyleCSSUrl: function () {
+				return 'jCinema/styles/' + jCinema.options.Style + '/' + viewName + '.css';
+			},
+			getViewLocaleUrl: function () {
+				return viewBaseUrl + '/locale';
+			}
+		};
+	};
+	
+	/**
 	 * Helper function to make a view begin its work after it's been pushed onto
 	 * the stack or after all views above it have been popped.
 	 * 
@@ -68,7 +102,7 @@ jCinema.ViewStack = function () {
 	 */
 	function beginView(viewName, data) {
 		// push a key handler for the view
-		var controller = jCinema.views[viewName + 'Controller'];
+		var controller = ViewNamingStrategy(viewName).getControllerClass();
 		if (controller.onKey) {
 			jCinema.IKeyHandler.pushHandler(controller.onKey);
 		} else {
@@ -103,7 +137,7 @@ jCinema.ViewStack = function () {
 			// that will be passed to begin() next
 			// time
 			var current = stack[stack.length - 1];
-			current.data = jCinema.views[current.viewName + 'Controller'].end();
+			current.data = ViewNamingStrategy(current.viewName).getControllerClass().end();
 		}
 	}
 	
@@ -117,14 +151,14 @@ jCinema.ViewStack = function () {
 	 */
 	// 
 	function prepareView(viewName, onComplete) {
-		var baseUrl = 'jCinema/views/' + viewName + '/';
-		jCinema.Utils.includeCSS(baseUrl + 'view.css', function () {
+		var vns = ViewNamingStrategy(viewName);
+		jCinema.Utils.includeCSS(vns.getViewCSSUrl(), function () {
 			// try to load a custom css from the styles directory
-			jCinema.Utils.includeCSS('jCinema/styles/' + jCinema.options.Style + '/' + viewName + '.css', function () {
-				jCinema.Utils.includeJS(baseUrl + 'controller.js');
+			jCinema.Utils.includeCSS(vns.getViewStyleCSSUrl(), function () {
+				jCinema.Utils.includeJS(vns.getViewJSUrl());
 				
 				// load the localization dict as well
-				jCinema.Localization.loadDictionary(baseUrl + 'locale');
+				jCinema.Localization.loadDictionary(vns.getViewLocaleUrl());
 				
 				onComplete();
 			});
@@ -140,7 +174,7 @@ jCinema.ViewStack = function () {
 	 * @param {Object} data The data object to pass to the view's begin() method.
 	 */
 	function showView(viewName, data) {
-		$('#view-container').load('jCinema/views/' + viewName + '/view.html', function () {
+		$('#view-container').load(ViewNamingStrategy(viewName).getViewHtmlUrl(), function () {
 			// run the new view
 			beginView(viewName, data);
 		});
@@ -175,7 +209,7 @@ jCinema.ViewStack = function () {
 		}
 		
 		// load the view if necessary
-		if (jCinema.views[viewName + 'Controller'] === undefined) {
+		if (ViewNamingStrategy(viewName).getControllerClass() === undefined) {
 			// pass our doLoad function down as completion handler
 			prepareView(viewName, doLoad);
 		} else {
