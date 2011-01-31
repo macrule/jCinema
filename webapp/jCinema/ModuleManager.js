@@ -46,6 +46,26 @@ jCinema.Module.prototype = {
 	 * @param {jCinmea.Menu} mainMenu The main menu for adding entries to.
 	 */
 	installMenus: function(mainMenu) {
+	},
+	
+	/**
+	 * An object literal that has event types as keys, and their listener
+	 * functions as values. If '*' is used as key, the listener is called for
+	 * all event types.
+	 * @see jCinema.EventDispatcher
+	 * @see jCinema.Command
+	 */
+	eventListeners: {
+	},
+	
+	/**
+	 * An object literal that has command types as keys, and their handler
+	 * functions as values. If '*' is used as key, the handler is called for
+	 * all command types.
+	 * @see jCinema.EventDispatcher
+	 * @see jCinema.Command
+	 */
+	commandHandlers: {
 	}
 };
 
@@ -94,6 +114,24 @@ jCinema.ModuleManager = function () {
 			
 			// let the module install its menus
 			module.installMenus(jCinema.MenuHandler.getMainMenu());
+			
+			// install declared command handlers
+			for (var i in module.commandHandlers) {
+				if (i === '*') {
+					jCinema.EventDispatcher.addListener(module.commandHandlers[i]);
+				} else {
+					jCinema.EventDispatcher.addListener(module.commandHandlers[i], 'Command.' + i);
+				}
+			}
+			
+			// install declared event listeners
+			for (var j in module.eventListeners) {
+				if (j === '*') {
+					jCinema.EventDispatcher.addListener(module.eventListeners[j]);
+				} else {
+					jCinema.EventDispatcher.addListener(module.eventListeners[j], j);
+				}
+			}
 			
 			jCinema.debug('Loaded module ' + module.name);
 			return true;
