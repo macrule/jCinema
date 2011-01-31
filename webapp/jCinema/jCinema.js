@@ -199,5 +199,15 @@ $(function() {
 	var mainMenu = jCinema.MenuHandler.getMainMenu();
 	mainMenu.append(new jCinema.MenuEntry(jCinema.STR('Settings')));
 	jCinema.MenuHandler.showMenu(mainMenu);
+	
+	// install a handler for the StartVideo command
+	jCinema.EventDispatcher.addListener(function (cmd) {
+		if (jCinema.IVideoControl.select(cmd.params.url) && jCinema.IVideoControl.play()) {
+			jCinema.ViewStack.pushView('VideoView');
+			return true;
+		} else {
+			return false;
+		}
+	}, jCinema.commands.StartVideo().type);
 });
 

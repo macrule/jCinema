@@ -15,11 +15,19 @@
 
 jCinema.ModuleManager.registerModule(jCinema.ModuleManager.createModule({
 		name: 'Movies',
+		
 		installMenus: function(mainMenu) {
-			// install a menu to browse movies
-			mainMenu.append(new jCinema.MenuEntry(jCinema.STR('Movies'), undefined, function() {
-					jCinema.ViewStack.pushView('Movies.VideoBrowser');
-				}, jCinema.Utils.getStyledImageUrl('video-icon.png'))
-			);
+			// install a menu item to browse movies
+			mainMenu.append(new jCinema.MenuEntry(jCinema.STR('Movies'),
+												  undefined,
+												  function() { jCinema.commands.BrowseVideosAtFileUrl().post(); },
+												  jCinema.Utils.getStyledImageUrl('video-icon.png')));
+		},
+		
+		commandHandlers: {
+			BrowseVideosAtFileUrl: function (cmd) {
+				jCinema.ViewStack.pushView('Movies.VideoBrowser', { browsePath: cmd.params.url });
+				return true;
+			}
 		}
 }));

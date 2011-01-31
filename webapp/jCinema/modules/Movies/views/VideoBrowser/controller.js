@@ -183,7 +183,7 @@ jCinema.views.VideoBrowserController = function () {
 	function activateItemAt(index) {
 		var item = getItem(index);
 		if (item.type == 'folder') {
-			jCinema.ViewStack.pushView('Movies.VideoBrowser', { browsePath: item.url });
+			jCinema.commands.BrowseVideosAtFileUrl(item.url).post();
 		} else if (item.type == 'file') {
 			showMovieSheet(item);
 		}
@@ -192,23 +192,22 @@ jCinema.views.VideoBrowserController = function () {
 	function showMovieSheet(item) {
 		if (item.movieSheetImageUrl == null) {
 			// if there is no movie sheet, play the item directly
-			if (jCinema.IVideoControl.select(item.url) &&
-				jCinema.IVideoControl.play()) {
-				jCinema.ViewStack.pushView('VideoView');
-			}
+			jCinema.commands.StartVideo(item.url).post();
 			return;
 		}
 		
-		jCinema.IKeyHandler.pushHandler(function (keyEvt) {
+		var keyHandler = function (keyEvt) {
 			var goBack = false;
 			if (keyEvt.type === jCinema.IKeyHandler.KeyEvent.Enter ||
 				keyEvt.type === jCinema.IKeyHandler.KeyEvent.Play ||
 				keyEvt.type === jCinema.IKeyHandler.KeyEvent.PlayPause) {
 				// enter and play button plays
-				if (jCinema.IVideoControl.select(item.url) &&
-					jCinema.IVideoControl.play()) {
-					jCinema.IKeyHandler.popHandler(); // get rid of this keyhandler
-					jCinema.ViewStack.pushView('VideoView');
+				
+				// get rid of this keyhandler
+				jCinema.IKeyHandler.popHandler();
+				if (!jCinema.commands.StartVideo(item.url).post()) {
+					// re-push the keyhandler
+					jCinema.IKeyHandler.pushHandler(keyHandler);
 				}
 			} else if (keyEvt.type === jCinema.IKeyHandler.KeyEvent.Back) {
 				// back button aborts
@@ -226,7 +225,8 @@ jCinema.views.VideoBrowserController = function () {
 			
 			// don't let anyone else handle key events
 			return false;
-		});
+		};
+		jCinema.IKeyHandler.pushHandler(keyHandler);
 		
 		// show wait indicator
 		jCinema.ViewStack.waitIndicator(true);
