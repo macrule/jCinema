@@ -115,11 +115,13 @@ jCinema.includeJS('jCinema/Utils.js');
  * Normally you want to use jCinema.options here.
  */
 jCinema.initPlatform = function (name, opts) {
+	var i;
+	
 	// include the platform main file
 	jCinema.Utils.includeJS('jCinema/platforms/' + name + '/Main.js');
 	
 	// first load the implementation files
-	for (var i = 0; i < jCinema.interfaceNames.length; i++) {
+	for (i = 0; i < jCinema.interfaceNames.length; i++) {
 		jCinema.Utils.includeJS('jCinema/platforms/' + name + '/' + jCinema.interfaceNames[i] + 'Impl.js');
 	}
 	
@@ -130,7 +132,7 @@ jCinema.initPlatform = function (name, opts) {
 	}
 	
 	// install interface implementations
-	for (var i = 0; i < jCinema.interfaceNames.length; i++) {
+	for (i = 0; i < jCinema.interfaceNames.length; i++) {
 		var intf = jCinema.interfaceNames[i];
 		for (f in implementation[intf + 'Impl']) {
 			jCinema['I' + intf][f] = implementation[intf + 'Impl'][f];
@@ -147,17 +149,21 @@ jCinema.initPlatform = function (name, opts) {
 };
 
 // include all necessary js files
-jCinema.Utils.includeJS('jCinema/external/jquery-1.4.4.min.js');
-jCinema.Utils.includeJS('jCinema/external/jquery-ui-1.8.7.custom.min.js');
-for (var i = 0; i < jCinema.otherClasses.length; i++) {
-	jCinema.Utils.includeJS('jCinema/' + jCinema.otherClasses[i] + '.js');
-}
-for (var i = 0; i < jCinema.interfaceNames.length; i++) {
-	jCinema.Utils.includeJS('jCinema/interfaces/I' + jCinema.interfaceNames[i] + '.js');
-}
-for (var i = 0; i < jCinema.moduleNames.length; i++) {
-	jCinema.Utils.includeJS('jCinema/modules/' + jCinema.moduleNames[i] + '/' + jCinema.moduleNames[i] + '.js');
-}
+(function () {
+	jCinema.Utils.includeJS('jCinema/external/jquery-1.4.4.min.js');
+	jCinema.Utils.includeJS('jCinema/external/jquery-ui-1.8.7.custom.min.js');
+	
+	var i;
+	for (i = 0; i < jCinema.otherClasses.length; i++) {
+		jCinema.Utils.includeJS('jCinema/' + jCinema.otherClasses[i] + '.js');
+	}
+	for (i = 0; i < jCinema.interfaceNames.length; i++) {
+		jCinema.Utils.includeJS('jCinema/interfaces/I' + jCinema.interfaceNames[i] + '.js');
+	}
+	for (i = 0; i < jCinema.moduleNames.length; i++) {
+		jCinema.Utils.includeJS('jCinema/modules/' + jCinema.moduleNames[i] + '/' + jCinema.moduleNames[i] + '.js');
+	}
+})();
 
 // unless overridden, the back button pops a view
 jCinema.IKeyHandler.pushHandler(jCinema.ViewStack.popView, jCinema.IKeyHandler.KeyEvent.Back);
