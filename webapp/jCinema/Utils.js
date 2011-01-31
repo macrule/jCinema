@@ -195,6 +195,36 @@ jCinema.Utils = function () {
 		return json;
 	};
 	
+	/**
+	 * Creates a sub class based on a super class. This is basic javascript inheritance,
+	 * and functions similar to this can be found all over the internet and literature.
+	 * 
+	 * @param {Object} subClass The subclass to create.
+	 * @param {Object} superClass The superclass to inherit the subclass from.
+	 * 
+	 * @example
+	 * Pet = function(name) {
+	 *     this.name = name;
+	 * }
+	 * 
+	 * Cat = function(name) {
+	 *    Pet.superclass.constructor.call(this, name);
+	 * }
+	 * jCinema.Utils.extendClass(Cat, Pet);
+	 */
+	var extendClass = function (subClass, superClass) {
+		var F = function () {};
+		F.prototype = superClass.prototype;
+		
+		subClass.prototype = new F();
+		subClass.prototype.constructor = subClass;
+		
+		subClass.superclass = superClass.prototype;
+		if (superClass.prototype.constructor == Object.prototype.constructor) {
+			superClass.prototype.constructor = superClass;
+		}
+	};
+	
 	return {
 		convertTimeCodeToSeconds: convertTimeCodeToSeconds,
 		convertSecondsToTimeCode: convertSecondsToTimeCode,
@@ -205,7 +235,9 @@ jCinema.Utils = function () {
 		reloadPageAndCss: reloadPageAndCss,
 		getStyledImageUrl: getStyledImageUrl,
 		
-		removeJSONComments: removeJSONComments
+		removeJSONComments: removeJSONComments,
+		
+		extendClass: extendClass
 	};
 	
 }();
